@@ -52,9 +52,9 @@ fi
 
 # Step 5: Install dependencies and build
 echo -e "${YELLOW}[5/7]${NC} Installing dependencies and building..."
-npm ci
+npm install
 cd apps/report-generator/frontend
-npm ci
+npm install
 npm run build
 cd ../../../
 
