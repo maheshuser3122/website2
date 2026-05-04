@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FiDownload, FiRefresh, FiSettings } from 'react-icons/fi'
+import { FiDownload, FiRotateCw, FiSettings } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import { ReportData } from '@types/index'
 import { useReportGeneration } from '@hooks/useReportGeneration'
@@ -58,7 +58,7 @@ function ReportPreview({ report, onExport }: ReportPreviewProps) {
           >
             {exporting ? (
               <>
-                <FiRefresh className="w-4 h-4 animate-spin" />
+                <FiRotateCw className="w-4 h-4 animate-spin" />
                 Exporting...
               </>
             ) : (
