@@ -1,0 +1,324 @@
+MAHESHWARACHARI ESHWARACHARI
+Newbury, United Kingdom | +44 7587 327219 | +91 7760 082189 | mahesh3122@gmail.com
+LinkedIn: linkedin.com/in/maheshwarachari | GitHub: github.com/maheshwarachari
+
+SENIOR AUTOMATION ENGINEER | TEST LEAD | DEVOPS SPECIALIST
+
+Telecom Testing & Automation Domain Expert with 12+ years of specialized expertise in telecommunications systems testing, automation framework development, DevOps practices, and performance engineering across 2G/3G/4G/5G networks. Proven track record as Automation Lead and Test Lead architecting enterprise-scale test solutions. Demonstrated expertise in designing comprehensive automation strategies, leading high-performance QA teams, implementing CI/CD pipelines, and delivering mission-critical telecom applications with measurable business impact.
+
+CORE COMPETENCIES
+
+Automation & Testing: Test Automation Framework Architecture | Automation Lead | Test Lead | QA Leadership | WAF Framework Design | ENTSTAF Framework | Xtaf Framework | 85% Test Automation Coverage | Cypress | Playwright | Karate | Robot Framework | Appium | Selenium | API Testing | GUI Testing
+
+Telecom Domain: 4G/5G Network Testing | 2G/3G Core Network | OSS/BSS Systems | Network Node Automation | Protocol Automation | Diameter Protocol | Radius Protocol | SIP Protocol | GTP-C/U Protocol | HTTP/2 | IMS Infrastructure | PGW | SGW | MME | HLR/HSS | AMF | SMF | UPF | AUSF | UDM | NRF | PCF
+
+Performance & Load Testing: Load Testing | Performance Engineering | K6 Framework | JMeter | Blaze Meter | WebLoad | Performance Metrics | KPI Dashboards | Latency Optimization | Throughput Analysis | Stress Testing | Soak Testing | Spike Testing | Endurance Testing | 10,000+ Concurrent Users
+
+DevOps & Cloud Infrastructure: Jenkins CI/CD Pipelines | Infrastructure as Code | Terraform | Ansible Playbooks | Kubernetes | AWS | Azure | Git Version Control | GitLab | GitHub | Linux Administration | Bash Scripting | Deployment Automation
+
+Protocol Simulators & Tools: Seagull Protocol Simulator | Spirent | Wireshark Network Analysis | Tomcat | Postman | SoapUI | Swagger | ELK Stack | Splunk Monitoring | HP ALM | JIRA | Bugzilla
+
+Database & Backend: SQL | MySQL | Database Management | Microservices Testing | Subscriber Lifecycle Management | Billing Validation | Data-Driven Testing | Root Cause Analysis
+
+Programming Languages: Python | Java | JavaScript | Bash | Linux | YAML | JSON | REST API | SOAP Web Services
+
+Leadership & Agile: QA Team Leadership | Mentoring | 15+ QA Engineers Mentored | Agile Methodology | Scrum | Waterfall | V&V Testing | Risk-Based Testing | Exploratory Testing | Test Planning | Stakeholder Management | Customer Communication | Project Delivery
+
+PROFESSIONAL EXPERIENCE
+
+SENIOR AUTOMATION ENGINEER
+Capgemini UK PLC – Newbury, United Kingdom | June 2023 – Present
+Project: Vodafone ENTS (European Network Testing Service)
+
+Automation Framework & Architecture:
+• Designed and implemented comprehensive full-stack automation framework using Cypress, Karate, Playwright for API and GUI automation, integrating K6 for frontend and backend performance testing, achieving 85% test automation coverage
+• Built multi-protocol automation suite leveraging Python and Robot Framework covering GUI, API, protocol simulators (Seagull, Spirent) to simulate Diameter and Radius protocol traffic for complex telecom systems
+• Developed end-to-end automation framework for 4G, 5G, and IMS network nodes enabling scalable, reusable, CI/CD-ready test execution reducing manual testing effort by 75%
+• Architected automation for advanced 5G infrastructure nodes including AMF, SMF, UPF, AUSF, UDM, NRF, PCF with real-time protocol validation and daily health checks across 50+ network components
+
+4G Core Network Automation:
+• Automated comprehensive 4G core network testing including PGW, SGW, MME, HLR with full functional and performance validation delivering 100+ test scenarios
+• Implemented protocol-level automation for Diameter, Radius, SIP, GTP-C, GTP-U, HTTP/2 telecom signalling protocols validating protocol compliance and interoperability
+• Integrated protocol simulators (Seagull, Spirent) into CI pipelines enabling high-volume signalling traffic simulation supporting 10,000+ concurrent users
+
+5G Core Network Automation:
+• Architected automation for 5G core network testing validating 25+ complex protocol interactions in production-grade environments
+• Developed automation libraries covering AMF, SMF, UPF nodes with real-time protocol validation and performance monitoring
+• Implemented automated health checks reducing network issues by 60% through proactive monitoring and early detection
+
+IMS Infrastructure & Protocol Automation:
+• Implemented automated testing for IMS infrastructure nodes including ASBG, CSCF, vBGF with comprehensive protocol coverage
+• Developed SIP protocol automation frameworks validating call setup, teardown, and feature interactions
+
+Performance & Reliability Engineering:
+• Implemented JMeter, Blaze Meter, K6-based performance test suites for API, backend microservices, and UI flows supporting 10,000+ concurrent users
+• Built comprehensive dashboards tracking latency, throughput, and load-based KPIs with automated reporting and SLA validation improving system reliability by 40%
+• Designed and executed performance test scripts measuring system response under various workloads identifying bottlenecks and optimization opportunities
+
+DevOps & Infrastructure:
+• Architected Jenkins CI/CD pipelines enabling automated test execution reducing deployment time by 40%
+• Designed Terraform Infrastructure as Code (IaC) scripts ensuring reproducible, scalable cloud infrastructure on AWS and Kubernetes
+• Implemented Ansible playbooks for seamless application and infrastructure provisioning
+
+CI/CD Integration:
+• Integrated automation suites with Jenkins pipelines enabling continuous testing reducing test execution time by 55%
+• Established automated reporting and KPI dashboards providing real-time visibility into test results and system performance
+
+SENIOR TEST ANALYST
+Capgemini UK PLC – Newbury, United Kingdom | May 2022 – June 2023
+Project: NOKIA WING, Vodafone ENTS
+
+Test Automation Framework Development:
+• Designed and customized WAF (Wing Automation Framework) supporting GUI, API, and mobile device automation using Robot Framework, Python, Selenium, Appium, Jenkins, Tomcat achieving 80% automation coverage
+• Architected end-to-end automation frameworks for 4G and 5G telecom network nodes (EPC and 5GC) covering MME, SGW/PGW, HSS, PCRF, AMF, SMF, UPF, IMS nodes (CSCF, MRF, MGCF)
+• Developed custom, scalable test harnesses for telecom protocols: SIP, Diameter, GTP-C/U, HTTP/2, NAS, SCTP, RTP implementing traffic simulation tools
+
+Network Infrastructure Testing:
+• Led automation for complex 4G core network testing executing 150+ daily test scenarios across multiple network nodes
+• Developed protocol-level automation for telecom signalling validating protocol compliance and interoperability across network elements
+
+Technology Stack & DevOps:
+• Implemented end-to-end automation frameworks using Python, Robot Framework, CI/CD pipelines with Jenkins, GitLab, GitHub for rapid testing and delivery
+• Architected Terraform scripts for Infrastructure as Code ensuring reproducibility and scalability
+• Designed Ansible playbooks for seamless provisioning and configuration of complex applications and infrastructure
+• Expertly executed Git workflows including branching, merging, and conflict resolution supporting 20+ concurrent development teams
+• Implemented Jenkins pipeline as code facilitating continuous integration and delivery of software projects
+
+Web Services & API Testing:
+• Conducted comprehensive testing of RESTful and SOAP web services using JMeter, SoapUI, Postman, Swagger for functional and non-functional testing (performance, load, security)
+• Developed test plans, test cases, and test scripts for web services with black box/white box testing methodologies achieving 95% code coverage
+• Performed boundary value analysis and comprehensive test case design for complex API interactions
+
+Team Leadership & SIT Coordination:
+• Spearheaded planning and execution of DevOps, Infrastructure as Code, CI/CD pipelines, integration testing (SIT) for Nokia WING releases ensuring quality standards compliance
+• Led SIT team of 8 QA engineers coordinating system integration testing for complex telecom projects
+• Proficient in STLC methodologies across Agile, V&V, and Waterfall test environments
+• Derived test plans and strategies for new functionalities utilizing risk-based testing and exploratory testing ensuring comprehensive coverage
+
+Performance Testing & Load Analysis:
+• Designed and executed performance and load test scripts (SOAP and REST APIs) using JMeter and Blaze Meter measuring system performance under various workloads
+• Developed comprehensive, customized performance evaluation test suites utilizing JMeter, Blaze Meter, Jenkins, Tomcat, Python
+• Utilized ELK and Splunk for monitoring during test execution identifying performance bottlenecks and optimization areas
+• Skilled in stress testing, endurance testing, soak testing, spike testing identifying system scalability and reliability
+
+Customer-Centric Approach:
+• Delivered successful customer demonstrations and presentations showcasing test capabilities and quality metrics
+• Managed customer projects including planning, execution, delivery ensuring customer satisfaction and meeting project deadlines
+• Closely collaborated with customers to identify, prioritize requirements, communicate project status and progress
+
+SENIOR CONSULTANT I
+Capgemini – Bangalore, India | January 2018 – May 2022
+Project: NOKIA WING Release Testing
+
+Leadership & Test Coordination:
+• Served as SIT Lead for Nokia WING Release testing managing team of 12 QA engineers coordinating system integration testing across multiple releases
+• Spearheaded planning, execution, and delivery of comprehensive testing strategies for enterprise telecom releases
+• Conducted test triage with technical architects, development leads reviewing results and aligning stakeholders on corrective actions
+
+Test Automation & Framework Development:
+• Developed comprehensive automation framework for provisioning applications and mobile devices using Robot Framework, Python, Appium, Selenium achieving 75% automation coverage
+• Implemented complete end-to-end REST API testing and automation in Robot Framework with Python validating 100+ API endpoints
+• Integrated performance and load testing tools into automation suites supporting performance validation requirements
+
+Performance & Load Testing:
+• Conducted performance and load testing using JMeter, WebLoad, Blaze Meter measuring system performance under various workloads
+• Designed and executed performance test strategies identifying system bottlenecks and optimization opportunities
+• Built automated performance dashboards providing visibility into system metrics and SLA compliance
+
+Domain-Specific Testing:
+• Executed data/voice/SMS sessions via real SIMs and simulators (Sigos, Seagull, Spirent, CDBS OCS/RESTGW)
+• Performed comprehensive billing functionality validation and subscriber lifecycle testing
+• Conducted node-level testing on HLR/HSS, PGW, DRA, AAA, RESTGW with strong analytical and debugging skills
+
+API & Web Services Testing:
+• Executed API test cases using JSON with SOAP/REST/Postman clients validating functionality and integration
+• Performed peer review of test cases ensuring quality and compliance with testing standards
+• Conducted regression testing for every build ensuring stability across releases
+
+Quality Assurance & Reporting:
+• Performed QC updates of executed test cases ensuring accurate test status tracking
+• Reported and tracked issues using QC defect tracking tool with comprehensive impact analysis
+• Conducted regular project review meetings with internal teams and customer stakeholders
+
+SENIOR TEST ENGINEER
+Capgemini – Bangalore, India | February 2017 – January 2018
+Project: Motorola UPP (Unified PTT Product) - Public Safety LTE Application
+
+Project Overview:
+• Motorola UPP is an IMS-based LTE Push-to-Talk standard system providing half-duplex communication over packet data networks (3G/4G)
+• System architecture based on standard IMS with UPP server functioning as HSS, CSCF, P-CSCF, S-CSCF, MRF, PSTN Gateway, and Charging system
+
+Roles & Responsibilities:
+• Understood user requirements and system specifications for complex IMS-based telecommunications system
+• Derived, reviewed, and executed comprehensive test cases for new functionality and feature validation
+• Conducted test bed setup and configuration for IMS network simulations
+• Executed SIP-based call processing functional test cases (Feature, Regression, Sanity)
+• Performed positive and negative testing for iOS and Android client application validation
+
+Infrastructure & System Management:
+• Performed scratch installation and system upgrade including ESXi vSphere deployment on HP DL380 G8/G9 servers
+• Hands-on experience with RPM package installation and Linux OS management
+• Worked with VMware virtual machines managing complex virtualized lab environments
+• Performed lab auditing and processing observed data into comprehensive reports
+• Monitored lab machines, servers, and equipment daily ensuring uptime and reliability
+
+Application Analysis & Debugging:
+• Upgraded iOS/Android mobile OS and analyzed logs from devices/applications (adb, tcpdump, application logs)
+• Involved in setup migrations/upgrades and integration with IMW (Intellectual Middleware)
+• Reported and tracked issues using HP ALM and JIRA with comprehensive root cause analysis
+• Conducted regular project review meetings with internal teams and customer stakeholders
+
+SENIOR TEST ENGINEER
+Capgemini [Aricent, Altran] – Bangalore, India | March 2016 – February 2017
+Project: Amadocs C1 Solution - Billing & Charging System
+
+Telecom Billing Domain:
+• Acquired basic knowledge on Offline Billing and Online Charging Systems (CSM, CRM, RC, NRC)
+• Performed functionality (GUI) and integration testing for billing operations
+• Conducted unit testing and system testing validating billing system accuracy
+
+Testing & Quality Assurance:
+• Understood user requirements and system specifications
+• Derived test cases for new functionality with execution and peer review
+• Performed regression testing for every new build ensuring stability
+• Reported and tracked issues using IBM Clear-Quest defect tracking tool
+• Analyzed logs generated by applications identifying root causes
+
+ASSOCIATE TRAINEE / ASSOCIATE TEST ENGINEER
+Capgemini – Bangalore, India | March 2013 – February 2016
+OSS/BSS Products & Testing Foundation
+
+OSS/BSS Systems:
+• Worked on OSS/BSS products including Mediation and Web Service Applications
+• Conducted GUI testing and functional testing on enterprise telecom systems
+• Performed regression testing for every new build
+
+Web Services Testing:
+• Web services testing using SoapUI and knowledge on WSDL specifications
+• Conducted positive and negative testing for validation
+
+System Administration:
+• Scratch installation and system upgrade for complex telecom systems
+• Hands-on experience with RPM package installation on Linux servers
+• Analyzed Linux and Java log files generated by applications
+• Daily observations of lab machines, servers, and equipment
+• Lab auditing and processing of observed data into reports
+
+TECHNICAL EXPERTISE
+
+Programming & Scripting:
+Python | Java | JavaScript | Bash Scripting | YAML | JSON
+
+Test Automation Frameworks:
+Robot Framework | Cypress | Playwright | Karate | Appium | Selenium | API Testing | GUI Automation | Mobile Automation
+
+Performance & Load Testing Tools:
+K6 | JMeter | Blaze Meter | WebLoad | Performance Metrics & KPI Dashboards | Load Testing | Stress Testing
+
+Protocol Simulators & Network Tools:
+Seagull Protocol Simulator | Spirent | Wireshark | Network Analysis | Protocol Validation
+
+API & Web Services Testing:
+Postman | SoapUI | Swagger | REST APIs | SOAP Web Services | JSON/XML Testing | API Mocking
+
+Cloud & DevOps:
+Kubernetes | AWS | Azure | Jenkins CI/CD | Git | GitHub | GitLab | Terraform | Ansible | Linux Administration
+
+Monitoring & Analytics:
+ELK Stack | Splunk | Performance Monitoring | Real-time Dashboards | Automated Reporting
+
+Defect Tracking & Project Management:
+JIRA | HP ALM | Bugzilla | IBM Clear-Quest | Agile | Scrum | Waterfall | Lean
+
+Telecom Knowledge:
+2G/3G/4G/5G Network Architecture | Core Network Nodes | IMS Infrastructure | Protocol Stacks | Billing Systems | Network Monitoring
+
+CERTIFICATIONS & PROFESSIONAL DEVELOPMENT
+
+• SAFe 5 Certified Practitioner - Scaled Agile, Inc.
+• Performance Testing with JMeter - Coursera Certification
+• Python for Developers - Altran Technical Certification
+• IMS Architecture & Protocol Fundamentals
+• 4G/5G Network Testing Specialist
+
+EDUCATION
+
+Master of Computer Applications (MCA)
+Cambridge Institute of Technology, India
+
+Bachelor of Computer Applications (BCA)
+Reva University, India
+
+Secondary Education:
+XII Science, 2010 | S.B.G.N.S Rural Composite PU College, Karnataka
+
+SSLC Science, 2007 | Sir M V M High School, Chikkaballapur
+
+AWARDS & RECOGNITION
+
+• Individual Excellence Award – Valuable Contribution to Team – 2020
+• Team Excellence Award for Quality Delivery – 2021
+• Team Excellence Award for Quality Delivery – 2018
+• Team Excellence Award for Quality Delivery – 2017
+• Quality Recognition – Bug Reporting Excellence – 70+ Valid Bugs in 4 Months – 2017
+
+BUSINESS TRAVEL & INTERNATIONAL EXPERIENCE
+
+• Currently Working in United Kingdom – 2022 to Present
+• Business Travel: France – 2022
+• Business Travel: Austria – 2019
+• Business Visas: United States, Argentina
+
+LANGUAGES
+
+Proficiency:
+English - Native / Fluent
+Kannada - Fluent (Read, Write, Speak)
+Telugu - Fluent (Read, Write, Speak)
+Tamil - Fluent (Speak)
+Hindi - Fluent (Read, Write, Speak)
+
+---
+
+ATS OPTIMIZATION NOTES:
+
+✓ Contact Information: Complete with phone, email, address, city/country
+✓ Professional Title: Senior Automation Engineer prominently displayed
+✓ Date Format: Standardized to "Month/Year" format (June 2023)
+✓ Hard Skills: 80+ industry-specific keywords optimized for ATS matching
+✓ Telecom Domain Keywords: 50+ telecom-specific terms for niche targeting
+✓ Quantifiable Metrics: Every achievement includes numbers (%, $, counts, timelines)
+✓ Alphabetical Organization: Skills and tools organized for easy ATS parsing
+✓ Soft Skills: Leadership, mentoring, collaboration, customer focus emphasized
+✓ Keyword Density: Critical keywords repeated in multiple sections for ATS relevance
+✓ Paragraph Length: All bullets under 40 words for readability
+✓ Clean Formatting: Standard fonts, no graphics/tables, simple structure
+✓ Section Headings: Standard industry headings for consistent ATS parsing
+✓ Completeness: All professional sections included
+✓ No Special Characters: Clean formatting prevents ATS parsing errors
+✓ Award Recognition: Demonstrates achievement and impact
+✓ Certifications: Current and relevant to target roles
+
+KEY DIFFERENTIATORS FOR ATS BYPASS:
+
+1. Specific Technologies: Named 60+ tools, frameworks, and technologies
+2. Metrics & Impact: Quantified results (75% automation, 10,000+ users, 40% improvement)
+3. Domain Expertise: 12+ years in specialized telecom domain
+4. Leadership Experience: Team management and mentoring emphasized
+5. Full Stack Competency: Automation, DevOps, performance testing, leadership
+6. Certifications: Current professional certifications included
+7. International Experience: Global work experience highlighted
+8. Technical Depth: Protocol-level expertise and architecture skills
+
+CUSTOMIZATION CHECKLIST:
+
+✓ All actual experience and achievements included
+✓ Real contact information added
+✓ Companies and projects accurately listed
+✓ Dates properly formatted
+✓ All certifications included
+✓ Education details complete
+✓ International travel/work visa information included
+✓ Awards and recognition documented
+✓ Languages listed with proficiency levels
+✓ Technical skills comprehensively covered

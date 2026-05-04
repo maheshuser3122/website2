@@ -1,0 +1,252 @@
+.auto-edit-page {
+  width: 100%;
+}
+
+.edit-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit-container h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.camera-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-box h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.stat-box .count {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+.stat-box .text {
+  margin: 0;
+  opacity: 0.95;
+}
+
+.effects-section {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.effects-section h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.effects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.effect-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.effect-checkbox:hover {
+  border-color: #667eea;
+  background: #f5f7ff;
+}
+
+.effect-checkbox input[type="checkbox"] {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  accent-color: #667eea;
+}
+
+.effect-checkbox .label-text {
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.edit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.edit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-box {
+  background: #fee;
+  border: 2px solid #fcc;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.result-box {
+  background: #efe;
+  border: 2px solid #cfc;
+  color: #333;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.result-box h3 {
+  color: #2d5a2d;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.result-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.result-stats .stat {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.result-stats .stat .label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.result-stats .stat .value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d5a2d;
+}
+
+.result-stats .stat .value.success {
+  color: #27a043;
+}
+
+.result-stats .stat .value.error {
+  color: #d32f2f;
+}
+
+.output-path {
+  margin: 0;
+  padding: 1rem;
+  background: white;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  word-break: break-all;
+  color: #666;
+}
+
+.info-box {
+  background: #f0f8ff;
+  border: 2px solid #b3d9ff;
+  color: #0055cc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.info-box p {
+  margin: 0;
+}
+.info-message {
+  background: #fef3cd;
+  border-left: 4px solid #ffc107;
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+}
+
+.info-message h4 {
+  margin: 0 0 0.75rem 0;
+  color: #856404;
+  font-size: 1.05rem;
+}
+
+.info-message p {
+  margin: 0.5rem 0;
+  color: #856404;
+  font-size: 0.95rem;
+}
+
+.info-message code {
+  background: #fff3cd;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #333;
+}
+
+.info-message ul {
+  margin: 0.75rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.info-message li {
+  margin: 0.5rem 0;
+  color: #856404;
+}

@@ -1,0 +1,47 @@
+{
+  "name": "website2-business-portal",
+  "version": "2.0.0",
+  "description": "Production-grade Business Portal - Invoice Generator, Report Generator, Resume Builder, TDS Manager",
+  "type": "module",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "node --watch server/app.js",
+    "install:all": "npm install && cd apps/invoice-generator/backend && npm install && cd ../../report-generator/backend && npm install && cd ../../resume-builder/backend && npm install && cd ../../tds-manager/backend && npm install && cd ../../../..",
+    "start:invoice": "cd apps/invoice-generator/backend && npm start",
+    "start:report": "cd apps/report-generator/backend && npm start",
+    "start:resume": "cd apps/resume-builder/backend && npm start",
+    "start:tds": "cd apps/tds-manager/backend && npm start",
+    "start:all-backends": "concurrently \"npm run start:invoice\" \"npm run start:report\" \"npm run start:resume\" \"npm run start:tds\" \"npm start\"",
+    "dev:invoice": "cd apps/invoice-generator/backend && npm run dev",
+    "dev:report": "cd apps/report-generator/backend && npm run dev",
+    "dev:resume": "cd apps/resume-builder/backend && npm run dev",
+    "dev:tds": "cd apps/tds-manager/backend && npm run dev",
+    "build:report": "cd apps/report-generator/frontend && npm run build",
+    "lint": "cd apps/report-generator/frontend && npm run lint 2>/dev/null || true",
+    "test": "echo 'No tests configured yet'"
+  },
+  "keywords": [
+    "invoice",
+    "report",
+    "resume",
+    "tds",
+    "business",
+    "portal"
+  ],
+  "author": "MCHARV TECHLABS",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  }
+}

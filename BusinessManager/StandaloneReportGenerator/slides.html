@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.11.0/dist/pptxgen.umd.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; min-height: 100vh; padding: 0; }
+        
+        .container { display: flex; height: 100vh; }
+        
+        .sidebar { width: 280px; background: #16213e; padding: 20px; overflow-y: auto; border-right: 2px solid #667eea; }
+        .sidebar h3 { color: #667eea; margin-bottom: 20px; font-size: 18px; }
+        .sidebar button { width: 100%; padding: 12px; margin: 8px 0; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .sidebar button:hover { background: #764ba2; transform: translateX(5px); }
+        .sidebar button.secondary { background: #444; }
+        .sidebar button.secondary:hover { background: #555; }
+        .status { margin: 15px 0; padding: 12px; border-radius: 6px; font-size: 13px; color: white; }
+        .status.success { background: #22c55e; }
+        .status.error { background: #ef4444; }
+        .status.loading { background: #f59e0b; }
+        
+        .slides { flex: 1; display: flex; flex-direction: column; background: #0f0f1e; }
+        .slide-nav { background: #16213e; padding: 15px; display: flex; gap: 10px; align-items: center; border-bottom: 2px solid #667eea; }
+        .slide-nav button { padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .slide-nav button:hover { background: #764ba2; }
+        .slide-counter { color: #999; font-size: 14px; margin: 0 15px; }
+        
+        .slide-container { flex: 1; overflow-y: auto; padding: 30px; }
+        .slide { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 40px; 
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .slide.title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 400px;
+        }
+        
+        .slide h1 { color: #333; font-size: 36px; margin-bottom: 20px; border-bottom: 4px solid #667eea; padding-bottom: 15px; }
+        .slide h2 { color: #667eea; font-size: 24px; margin: 20px 0; }
+        
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0; }
+        .kpi-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .kpi-label { font-size: 13px; opacity: 0.9; text-transform: uppercase; margin-bottom: 10px; }
+        .kpi-value { font-size: 36px; font-weight: bold; margin: 10px 0; }
+        .kpi-target { font-size: 12px; opacity: 0.8; }
+        
+        .chart-wrapper { position: relative; height: 400px; margin: 30px 0; }
+        .chart-title { font-weight: bold; margin-bottom: 15px; color: #333; font-size: 18px; }
+        
+        .heatmap { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .heatmap th, .heatmap td { border: 1px solid #ddd; padding: 12px; text-align: center; font-size: 13px; }
+        .heatmap th { background: #667eea; color: white; font-weight: bold; }
+        .heatmap-cell { border-radius: 4px; color: white; font-weight: 600; }
+        .heatmap-high { background: #22c55e; }
+        .heatmap-medium { background: #eab308; color: #333; }
+        .heatmap-low { background: #ef4444; }
+        
+        .data-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+        .data-table th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        .data-table td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
+        .data-table tr:hover { background: #f8f9ff; }
+        
+        .multi-chart { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .multi-chart-item { background: #f8f9ff; padding: 15px; border-radius: 8px; }
+        .multi-chart-item .chart-wrapper { height: 300px; margin: 10px 0; }
+        
+        .hidden { display: none !important; }
+        
+        @media (max-width: 900px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 2px solid #667eea; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Report Generator</h3>
+            <button onclick="document.getElementById('fileInput').click();">Upload File</button>
+            <button class="secondary" onclick="loadSampleReport();">Load Sample</button>
+            <button class="secondary" onclick="downloadAllPPT();" id="downloadBtn" style="display: none; background: #22c55e;">Download PPT</button>
+            <button class="secondary" onclick="clearSlides();" id="clearBtn" style="display: none;">Clear</button>
+            <div class="status" id="status"></div>
+            <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;" onchange="handleUpload(event)">
+        </div>
+        
+        <!-- Slides View -->
+        <div class="slides">
+            <div class="slide-nav">
+                <button onclick="previousSlide();">← Previous</button>
+                <span class="slide-counter"><span id="currentSlide">0</span> / <span id="totalSlides">0</span></span>
+                <button onclick="nextSlide();">Next →</button>
+            </div>
+            <div class="slide-container" id="slideContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = null;
+        let currentSlideNum = 0;
+        let slides = [];
+        
+        function showStatus(msg, type) {
+            const el = document.getElementById('status');
+            el.textContent = msg;
+            el.className = 'status ' + type;
+        }
+        
+        function handleUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            showStatus('Reading file...', 'loading');
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    currentData = { sheets: {} };
+                    wb.SheetNames.forEach(name => {
+                        currentData.sheets[name] = XLSX.utils.sheet_to_json(wb.Sheets[name]);
+                    });
+                    showStatus('File loaded successfully!', 'success');
+                    renderSlides();
+                    showControlButtons();
+                } catch (err) {
+                    showStatus('Error: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        function loadSampleReport() {
+            currentData = {
+                sheets: {
+                    'KPIs': [
+                        { KPI: 'Network Availability', Value: 99.5, Target: 99.9 },
+                        { KPI: 'Cost Per Incident', Value: 2500, Target: 2000 },
+                        { KPI: 'MTTR (minutes)', Value: 15, Target: 20 },
+                        { KPI: 'Incidents/Month', Value: 8, Target: 5 }
+                    ],
+                    'Performance': [
+                        { Month: 'Jan', Uptime: 99.2, Response: 250, Errors: 0.8 },
+                        { Month: 'Feb', Uptime: 99.5, Response: 220, Errors: 0.6 },
+                        { Month: 'Mar', Uptime: 99.8, Response: 198, Errors: 0.3 },
+                        { Month: 'Apr', Uptime: 99.9, Response: 165, Errors: 0.2 }
+                    ],
+                    'Vendors': [
+                        { Vendor: 'Cisco', Share: 35, Status: 'Active', Score: 92 },
+                        { Vendor: 'Juniper', Share: 28, Status: 'Active', Score: 85 },
+                        { Vendor: 'Arista', Share: 22, Status: 'Active', Score: 88 },
+                        { Vendor: 'Nokia', Share: 15, Status: 'Support', Score: 75 }
+                    ],
+                    'Regional': [
+                        { Region: 'North America', Revenue: 2500, Satisfaction: 94 },
+                        { Region: 'Europe', Revenue: 1800, Satisfaction: 91 },
+                        { Region: 'Asia Pacific', Revenue: 1200, Satisfaction: 88 },
+                        { Region: 'Middle East', Revenue: 450, Satisfaction: 85 }
+                    ]
+                }
+            };
+            showStatus('Sample data loaded successfully!', 'success');
+            renderSlides();
+            showControlButtons();
+        }
+        
+        function renderSlides() {
+            slides = [];
+            
+            // Slide 1: Title
+            slides.push(`
+                <div class="slide title-slide">
+                    <h1 style="border: none; color: white;">Professional Report</h1>
+                    <p style="font-size: 20px; opacity: 0.9;">Executive Dashboard & Analytics</p>
+                </div>
+            `);
+            
+            // Slide 2: KPI Summary
+            if (currentData.sheets['KPIs']) {
+                const kpis = currentData.sheets['KPIs'];
+                let kpiHtml = '<div class="slide"><h1>Key Performance Indicators</h1><div class="kpi-grid">';
+                kpis.forEach(k => {
+                    kpiHtml += `
+                        <div class="kpi-card">
+                            <div class="kpi-label">${k.KPI}</div>
+                            <div class="kpi-value">${k.Value}</div>
+                            <div class="kpi-target">Target: ${k.Target}</div>
+                        </div>
+                    `;
+                });
+                kpiHtml += '</div></div>';
+                slides.push(kpiHtml);
+            }
+            
+            // Slide 3: Pie Chart - Vendors
+            slides.push(`
+                <div class="slide">
+                    <h1>Vendor Distribution</h1>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-pie"></canvas>
+                    </div>
+                </div>
+            `);
+            
+            // Slide 4: Line Chart - Performance
+            slides.push(`
+                <div class="slide">
+                    <h1>Performance Trends</h1>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-line"></canvas>
+                    </div>
+                </div>
+            `);
+            
+            // Slide 5: Bar Chart - KPI vs Target
+            slides.push(`
+                <div class="slide">
+                    <h1>KPI Performance vs Target</h1>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-bar"></canvas>
+                    </div>
+                </div>
+            `);
+            
+            // Slide 6: Heatmap
+            if (currentData.sheets['Regional']) {
+                const regional = currentData.sheets['Regional'];
+                let heatmapHtml = '<div class="slide"><h1>Regional Performance Heatmap</h1><table class="heatmap"><tr><th>Region</th><th>Revenue</th><th>Status</th></tr>';
+                regional.forEach(r => {
+                    const revStatus = r.Revenue > 2000 ? 'heatmap-high' : 'heatmap-medium';
+                    const satStatus = r.Satisfaction > 90 ? 'heatmap-high' : 'heatmap-medium';
+                    heatmapHtml += `<tr><td>${r.Region}</td><td class="heatmap-cell ${revStatus}">$${r.Revenue}K</td><td class="heatmap-cell ${satStatus}">${r.Satisfaction}%</td></tr>`;
+                });
+                heatmapHtml += '</table></div>';
+                slides.push(heatmapHtml);
+            }
+            
+            // Slide 7-N: Data Tables
+            Object.keys(currentData.sheets).forEach(sheet => {
+                const data = currentData.sheets[sheet];
+                if (data.length === 0) return;
+                let tableHtml = `<div class="slide"><h1>${sheet}</h1><table class="data-table"><tr>`;
+                Object.keys(data[0]).forEach(col => {
+                    tableHtml += `<th>${col}</th>`;
+                });
+                tableHtml += '</tr>';
+                data.forEach(row => {
+                    tableHtml += '<tr>';
+                    Object.keys(row).forEach(col => {
+                        tableHtml += `<td>${row[col]}</td>`;
+                    });
+                    tableHtml += '</tr>';
+                });
+                tableHtml += '</table></div>';
+                slides.push(tableHtml);
+            });
+            
+            currentSlideNum = 0;
+            showSlide(0);
+        }
+        
+        function showSlide(num) {
+            if (slides.length === 0) return;
+            currentSlideNum = Math.max(0, Math.min(num, slides.length - 1));
+            document.getElementById('slideContainer').innerHTML = slides[currentSlideNum];
+            document.getElementById('currentSlide').textContent = currentSlideNum + 1;
+            document.getElementById('totalSlides').textContent = slides.length;
+            
+            setTimeout(renderCharts, 500);
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlideNum + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlideNum - 1);
+        }
+        
+        function renderCharts() {
+            if (!currentData) return;
+            
+            // Pie Chart
+            const piectx = document.getElementById('chart-pie');
+            if (piectx && currentData.sheets['Vendors']) {
+                const vendors = currentData.sheets['Vendors'];
+                new Chart(piectx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: vendors.map(v => v.Vendor),
+                        datasets: [{
+                            data: vendors.map(v => v.Share),
+                            backgroundColor: ['#667eea', '#764ba2', '#22c55e', '#ef4444']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+            
+            // Line Chart
+            const linectx = document.getElementById('chart-line');
+            if (linectx && currentData.sheets['Performance']) {
+                const perf = currentData.sheets['Performance'];
+                const keys = Object.keys(perf[0]).filter(k => k !== 'Month');
+                new Chart(linectx, {
+                    type: 'line',
+                    data: {
+                        labels: perf.map(p => p.Month || p.Metric),
+                        datasets: keys.map((k, idx) => ({
+                            label: k,
+                            data: perf.map(p => p[k]),
+                            borderColor: ['#667eea', '#764ba2', '#22c55e'][idx],
+                            tension: 0.4
+                        }))
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+            
+            // Bar Chart
+            const barctx = document.getElementById('chart-bar');
+            if (barctx && currentData.sheets['KPIs']) {
+                const kpis = currentData.sheets['KPIs'];
+                new Chart(barctx, {
+                    type: 'bar',
+                    data: {
+                        labels: kpis.map(k => k.KPI),
+                        datasets: [
+                            { label: 'Actual', data: kpis.map(k => k.Value), backgroundColor: '#667eea' },
+                            { label: 'Target', data: kpis.map(k => k.Target), backgroundColor: '#e5e7eb' }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+        }
+        
+        function downloadAllPPT() {
+            if (!currentData) {
+                showStatus('No data loaded', 'error');
+                return;
+            }
+            
+            // Check if PptxGenJS is available
+            if (typeof window.PptxGenJS === 'undefined' && typeof PptxGenJS === 'undefined') {
+                showStatus('PowerPoint library initializing... please wait 3 seconds then try again', 'loading');
+                return;
+            }
+            
+            try {
+                showStatus('Creating PowerPoint...', 'loading');
+                // Get library from global scope
+                const Pptx = window.PptxGenJS || PptxGenJS;
+                const pres = new Pptx();
+                
+                // Title slide
+                let slide = pres.addSlide();
+                slide.background = { color: '667eea' };
+                slide.addText('Professional Report', { 
+                    x: 0.5, y: 2.5, w: 9, h: 1.5, 
+                    fontSize: 48, bold: true, color: 'FFFFFF', align: 'center' 
+                });
+                slide.addText('Executive Dashboard & Analytics', { 
+                    x: 0.5, y: 4.2, w: 9, h: 0.8, 
+                    fontSize: 24, color: 'E5E7EB', align: 'center' 
+                });
+                
+                // KPI slide
+                if (currentData.sheets['KPIs']) {
+                    slide = pres.addSlide();
+                    slide.background = { color: 'FFFFFF' };
+                    slide.addText('Key Performance Indicators', { 
+                        x: 0.5, y: 0.4, w: 9, h: 0.6, 
+                        fontSize: 32, bold: true, color: '667eea' 
+                    });
+                    
+                    const kpis = currentData.sheets['KPIs'].slice(0, 10);
+                    const tableData = [['KPI', 'Actual Value', 'Target Value']];
+                    kpis.forEach(k => {
+                        tableData.push([k.KPI || '', String(k.Value || ''), String(k.Target || '')]);
+                    });
+                    
+                    slide.addTable(tableData, {
+                        x: 0.5, y: 1.2, w: 9, h: 5.8,
+                        border: { pt: 1, color: 'CCCCCC' },
+                        fill: { color: 'F0F0F0' },
+                        align: 'left',
+                        fontSize: 11
+                    });
+                }
+                
+                // Performance slide
+                if (currentData.sheets['Performance']) {
+                    slide = pres.addSlide();
+                    slide.background = { color: 'FFFFFF' };
+                    slide.addText('Performance Data', { 
+                        x: 0.5, y: 0.4, w: 9, h: 0.6, 
+                        fontSize: 32, bold: true, color: '667eea' 
+                    });
+                    
+                    const perf = currentData.sheets['Performance'].slice(0, 10);
+                    if (perf.length > 0) {
+                        const cols = Object.keys(perf[0]);
+                        const tableData = [cols];
+                        perf.forEach(row => {
+                            tableData.push(cols.map(c => String(row[c] || '')));
+                        });
+                        
+                        slide.addTable(tableData, {
+                            x: 0.5, y: 1.2, w: 9, h: 5.8,
+                            border: { pt: 1, color: 'CCCCCC' },
+                            fill: { color: 'F0F0F0' },
+                            align: 'left',
+                            fontSize: 10
+                        });
+                    }
+                }
+                
+                // Vendors slide
+                if (currentData.sheets['Vendors']) {
+                    slide = pres.addSlide();
+                    slide.background = { color: 'FFFFFF' };
+                    slide.addText('Vendors Data', { 
+                        x: 0.5, y: 0.4, w: 9, h: 0.6, 
+                        fontSize: 32, bold: true, color: '667eea' 
+                    });
+                    
+                    const vendors = currentData.sheets['Vendors'].slice(0, 10);
+                    if (vendors.length > 0) {
+                        const cols = Object.keys(vendors[0]);
+                        const tableData = [cols];
+                        vendors.forEach(row => {
+                            tableData.push(cols.map(c => String(row[c] || '')));
+                        });
+                        
+                        slide.addTable(tableData, {
+                            x: 0.5, y: 1.2, w: 9, h: 5.8,
+                            border: { pt: 1, color: 'CCCCCC' },
+                            fill: { color: 'F0F0F0' },
+                            align: 'left',
+                            fontSize: 10
+                        });
+                    }
+                }
+                
+                // Regional slide
+                if (currentData.sheets['Regional']) {
+                    slide = pres.addSlide();
+                    slide.background = { color: 'FFFFFF' };
+                    slide.addText('Regional Data', { 
+                        x: 0.5, y: 0.4, w: 9, h: 0.6, 
+                        fontSize: 32, bold: true, color: '667eea' 
+                    });
+                    
+                    const regional = currentData.sheets['Regional'].slice(0, 10);
+                    if (regional.length > 0) {
+                        const cols = Object.keys(regional[0]);
+                        const tableData = [cols];
+                        regional.forEach(row => {
+                            tableData.push(cols.map(c => String(row[c] || '')));
+                        });
+                        
+                        slide.addTable(tableData, {
+                            x: 0.5, y: 1.2, w: 9, h: 5.8,
+                            border: { pt: 1, color: 'CCCCCC' },
+                            fill: { color: 'F0F0F0' },
+                            align: 'left',
+                            fontSize: 10
+                        });
+                    }
+                }
+                
+                // Additional sheets
+                Object.keys(currentData.sheets).forEach(sheet => {
+                    if (['KPIs', 'Performance', 'Vendors', 'Regional'].includes(sheet)) return;
+                    
+                    const data = currentData.sheets[sheet];
+                    if (data.length === 0) return;
+                    
+                    slide = pres.addSlide();
+                    slide.background = { color: 'FFFFFF' };
+                    slide.addText(sheet, { 
+                        x: 0.5, y: 0.4, w: 9, h: 0.6, 
+                        fontSize: 32, bold: true, color: '667eea' 
+                    });
+                    
+                    const cols = Object.keys(data[0]);
+                    const tableData = [cols];
+                    data.slice(0, 10).forEach(row => {
+                        tableData.push(cols.map(c => String(row[c] || '')));
+                    });
+                    
+                    slide.addTable(tableData, {
+                        x: 0.5, y: 1.2, w: 9, h: 5.8,
+                        border: { pt: 1, color: 'CCCCCC' },
+                        fill: { color: 'F0F0F0' },
+                        align: 'left',
+                        fontSize: 10
+                    });
+                });
+                
+                // Save with date timestamp
+                const timestamp = new Date().getTime();
+                pres.save({ fileName: 'Report-' + timestamp + '.pptx' });
+                showStatus('PowerPoint downloaded successfully!', 'success');
+            } catch (err) {
+                console.error('PPT Error:', err);
+                showStatus('Error creating PPT: ' + err.message, 'error');
+            }
+        }
+        
+        function showControlButtons() {
+            document.getElementById('downloadBtn').style.display = 'block';
+            document.getElementById('clearBtn').style.display = 'block';
+        }
+        
+        function clearSlides() {
+            currentData = null;
+            slides = [];
+            document.getElementById('slideContainer').innerHTML = '';
+            document.getElementById('downloadBtn').style.display = 'none';
+            document.getElementById('clearBtn').style.display = 'none';
+            document.getElementById('currentSlide').textContent = '0';
+            document.getElementById('totalSlides').textContent = '0';
+        }
+    </script>
+</body>
+</html>

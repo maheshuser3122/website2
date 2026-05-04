@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCHARV Business Manager - Unified Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>MCHARV TECHLABS</h1>
+                        <p>Business Manager Hub</p>
+                    </div>
+                </div>
+                <nav class="nav-menu">
+                    <a href="#all-apps" class="nav-link active" onclick="filterApps('all')">All Tools</a>
+                    <a href="#dashboard" class="nav-link" onclick="document.location.hash='dashboard'">Dashboard</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h2>Welcome to Your Business Manager</h2>
+                <p>Manage your business operations efficiently with our integrated suite of tools</p>
+            </section>
+
+            <!-- Quick Stats -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <i class="fas fa-percent"></i>
+                    <h3>7</h3>
+                    <p>Tools Available</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>100%</h3>
+                    <p>Ready to Use</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Fast</h3>
+                    <p>Performance</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Secure</h3>
+                    <p>Local Processing</p>
+                </div>
+            </section>
+
+            <!-- Applications Grid -->
+            <section class="apps-grid">
+                <h2 class="section-title">Business Tools</h2>
+                <div class="grid-container">
+                    <!-- Invoice Generator -->
+                    <div class="app-card" data-category="finance">
+                        <div class="app-header">
+                            <div class="app-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <span class="app-badge">Finance</span>
+                        </div>
+                        <h3>Invoice Generator</h3>
+                        <p>Generate professional invoices with company details, taxes, and payment terms. Perfect for billing clients and tracking payments.</p>
+                        <div class="app-features">
+                            <span class="feature-tag"><i class="fas fa-check"></i> Professional Templates</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> GST/Tax Support</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> PDF Export</span>
+                        </div>
+                        <a href="InvoiceGenerator/index.html" class="app-button" target="_blank">
+                            <span>Open Invoice Generator</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Company Stamp Manager -->
+                    <div class="app-card" data-category="document">
+                        <div class="app-header">
+                            <div class="app-icon">
+                                <i class="fas fa-stamp"></i>
+                            </div>
+                            <span class="app-badge">Documents</span>
+                        </div>
+                        <h3>Company Stamp Manager</h3>
+                        <p>Add professional company and director seals to your documents. Customize position, rotation, scale, and opacity for authentic stamping.</p>
+                        <div class="app-features">
+                            <span class="feature-tag"><i class="fas fa-check"></i> Multiple Stamp Types</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Customizable</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Real-time Preview</span>
+                        </div>
+                        <a href="CompanyStampManager/index.html" class="app-button" target="_blank">
+                            <span>Open Stamp Manager</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Photo Organizer -->
+                    <div class="app-card" data-category="media">
+                        <div class="app-header">
+                            <div class="app-icon">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <span class="app-badge">Media</span>
+                        </div>
+                        <h3>Photo Organizer</h3>
+                        <p>Intelligently organize, enhance, and manage your photo library. Detect duplicates, bad photos, and auto-enhance images with AI-powered tools.</p>
+                        <div class="app-features">
+                            <span class="feature-tag"><i class="fas fa-check"></i> AI Detection</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Batch Processing</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Auto-Enhancement</span>
+                        </div>
+                        <a href="photo-organizer/frontend/index.html" class="app-button" target="_blank">
+                            <span>Open Photo Organizer</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Resume Builder -->
+                    <div class="app-card" data-category="hr">
+                        <div class="app-header">
+                            <div class="app-icon">
+                                <i class="fas fa-file-user"></i>
+                            </div>
+                            <span class="app-badge">HR/Careers</span>
+                        </div>
+                        <h3>Resume Builder</h3>
+                        <p>Create professional, AI-powered resumes with multiple templates. Export to Word, PDF, or share your resume online with potential employers.</p>
+                        <div class="app-features">
+                            <span class="feature-tag"><i class="fas fa-check"></i> AI-Powered</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Multiple Formats</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Export Ready</span>
+                        </div>
+                        <a href="Resume%20Builder%20App/index.html" class="app-button" target="_blank">
+                            <span>Open Resume Builder</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Photo Print -->
+                    <div class="app-card" data-category="media">
+                        <div class="app-header">
+                            <div class="app-icon">
+                                <i class="fas fa-print"></i>
+                            </div>
+                            <span class="app-badge">Media</span>
+                        </div>
+                        <h3>Photo Print</h3>
+                        <p>Prepare and manage your photos for professional printing. Optimize images for print quality and create beautiful printed materials.</p>
+                        <div class="app-features">
+                            <span class="feature-tag"><i class="fas fa-check"></i> Print Optimization</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Quality Check</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Batch Ready</span>
+                        </div>
+                        <a href="Photo%20Print/index.html" class="app-button" target="_blank">
+                            <span>Open Photo Print</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Schengen Visa Appointment Booker -->
+                    <div class="app-card" data-category="travel">
+                        <div class="app-header">
+                            <div class="app-icon">
+                                <i class="fas fa-passport"></i>
+                            </div>
+                            <span class="app-badge">Travel</span>
+                        </div>
+                        <h3>Schengen Visa Booker</h3>
+                        <p>AI-powered appointment booking for Schengen visas. Find available slots, get smart recommendations, and manage your visa appointments across all Schengen countries.</p>
+                        <div class="app-features">
+                            <span class="feature-tag"><i class="fas fa-check"></i> AI Recommendations</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> 27+ Countries</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Smart Tips</span>
+                        </div>
+                        <a href="SchengenVisaAppointmentBooker/index.html" class="app-button" target="_blank">
+                            <span>Open Visa Booker</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- UK Driving License Appointment Booker -->
+                    <div class="app-card" data-category="travel">
+                        <div class="app-header">
+                            <div class="app-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <span class="app-badge">Travel</span>
+                        </div>
+                        <h3>UK Driving Test Booker</h3>
+                        <p>Research & plan your UK driving test with AI-powered centre recommendations. Direct link to official DVSA booking system for actual test bookings.</p>
+                        <div class="app-features">
+                            <span class="feature-tag"><i class="fas fa-check"></i> Smart Recommendations</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Prep Resources</span>
+                            <span class="feature-tag"><i class="fas fa-check"></i> Official DVSA Link</span>
+                        </div>
+                        <a href="UKDrivingLicenseAppointmentBooker/index.html" class="app-button" target="_blank">
+                            <span>Open Test Planner</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Links Section -->
+            <section class="quick-links">
+                <h2 class="section-title">Quick Access</h2>
+                <div class="links-container">
+                    <a href="InvoiceGenerator/index.html" class="quick-link-item" target="_blank">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Invoices</span>
+                    </a>
+                    <a href="CompanyStampManager/index.html" class="quick-link-item" target="_blank">
+                        <i class="fas fa-stamp"></i>
+                        <span>Stamps</span>
+                    </a>
+                    <a href="photo-organizer/frontend/index.html" class="quick-link-item" target="_blank">
+                        <i class="fas fa-images"></i>
+                        <span>Photos</span>
+                    </a>
+                    <a href="Resume%20Builder%20App/index.html" class="quick-link-item" target="_blank">
+                        <i class="fas fa-file-user"></i>
+                        <span>Resumes</span>
+                    </a>
+                    <a href="SchengenVisaAppointmentBooker/index.html" class="quick-link-item" target="_blank">
+                        <i class="fas fa-passport"></i>
+                        <span>Visa Booking</span>
+                    </a>
+                    <a href="UKDrivingLicenseAppointmentBooker/index.html" class="quick-link-item" target="_blank">
+                        <i class="fas fa-car"></i>
+                        <span>Driving Tests</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 MCHARV TECHLABS. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Support</a>
+                    <a href="#">Privacy</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function filterApps(category) {
+            const cards = document.querySelectorAll('.app-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

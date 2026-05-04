@@ -1,0 +1,23 @@
+{
+  "name": "company-stamp-manager",
+  "version": "1.0.0",
+  "description": "Professional Company Stamp Manager for adding digital stamps to documents",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "dev": "http-server"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "keywords": [
+    "stamp",
+    "document",
+    "company",
+    "manager",
+    "digital"
+  ],
+  "author": "MCHARV TECHLABS",
+  "license": "MIT"
+}

@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Generator - Excel to HTML Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .upload-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f1ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #ede9fe;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .upload-area h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .upload-area p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .secondary-btn {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .secondary-btn:hover {
+            background: #d1d5db;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+            display: block;
+        }
+
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+            display: block;
+        }
+
+        .output-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .output-section.active {
+            display: block;
+        }
+
+        .output-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .sheet-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            overflow-x: auto;
+        }
+
+        .sheet-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sheet-tab:hover {
+            color: #667eea;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .sheet-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #f0f1ff;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 1px solid #667eea;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .download-link:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Report Generator</h1>
+            <p>Upload an Excel file to preview and convert it to an interactive HTML report</p>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <h3>Drag and drop your Excel file here</h3>
+                <p>or click to browse</p>
+                <p style="font-size: 12px; margin-top: 10px; color: #999;">Supported: .xlsx, .xls</p>
+            </div>
+            <input type="file" id="fileInput" accept=".xlsx,.xls" />
+            <div id="status" class="status"></div>
+            <div class="button-group">
+                <button id="selectFileBtn">📂 Select File</button>
+                <a href="sample-data.xlsx" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center;">
+                    ⬇️ Download Sample Data
+                </a>
+            </div>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <h2>📋 Excel Data Preview</h2>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Sheets</h3>
+                    <div class="value" id="sheetCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Rows</h3>
+                    <div class="value" id="rowCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Columns</h3>
+                    <div class="value" id="columnCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>File Name</h3>
+                    <div class="value" id="fileName" style="font-size: 14px; word-break: break-all;">-</div>
+                </div>
+            </div>
+
+            <div class="sheet-tabs" id="sheetTabs"></div>
+
+            <div class="table-wrapper" id="tableWrapper">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📄</div>
+                    <p>No data to display</p>
+                </div>
+            </div>
+
+            <button id="exportBtn" class="secondary-btn">💾 Export as HTML</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const status = document.getElementById('status');
+        const outputSection = document.getElementById('outputSection');
+        const sheetTabs = document.getElementById('sheetTabs');
+        const tableWrapper = document.getElementById('tableWrapper');
+        const sheetCount = document.getElementById('sheetCount');
+        const rowCount = document.getElementById('rowCount');
+        const columnCount = document.getElementById('columnCount');
+        const fileName = document.getElementById('fileName');
+        const exportBtn = document.getElementById('exportBtn');
+
+        let workbook = null;
+        let currentSheet = null;
+
+        // Click to upload
+        selectFileBtn.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) handleFile(files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (typeof XLSX === 'undefined') {
+                displayStatus('❌ XLSX library not loaded. Please refresh the page.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    workbook = XLSX.read(e.target.result, { type: 'array' });
+                    displayStatus(`✅ Loaded "${file.name}" successfully!`, 'success');
+                    fileName.textContent = file.name;
+                    renderSheets();
+                    outputSection.classList.add('active');
+                } catch (error) {
+                    displayStatus(`❌ Error reading file: ${error.message}`, 'error');
+                }
+            };
+            reader.onerror = () => {
+                displayStatus('❌ Error reading file', 'error');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function displayStatus(msg, type) {
+            status.textContent = msg;
+            status.className = `status ${type}`;
+            if (type === 'success') {
+                setTimeout(() => status.className = 'status', 3000);
+            }
+        }
+
+        function renderSheets() {
+            sheetTabs.innerHTML = '';
+            sheetCount.textContent = workbook.SheetNames.length;
+
+            workbook.SheetNames.forEach((name, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = name;
+                btn.className = 'sheet-tab' + (index === 0 ? ' active' : '');
+                btn.onclick = () => selectSheet(name);
+                sheetTabs.appendChild(btn);
+            });
+
+            selectSheet(workbook.SheetNames[0]);
+        }
+
+        function selectSheet(sheetName) {
+            currentSheet = sheetName;
+            document.querySelectorAll('.sheet-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent === sheetName);
+            });
+            renderTable();
+        }
+
+        function renderTable() {
+            const sheet = workbook.Sheets[currentSheet];
+            const data = XLSX.utils.sheet_to_json(sheet);
+
+            if (!data.length) {
+                tableWrapper.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>This sheet is empty</p></div>';
+                return;
+            }
+
+            rowCount.textContent = data.length;
+            columnCount.textContent = Object.keys(data[0]).length;
+
+            let html = '<table><thead><tr>';
+            Object.keys(data[0]).forEach(key => {
+                html += `<th>${key}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            data.forEach(row => {
+                html += '<tr>';
+                Object.values(row).forEach(value => {
+                    html += `<td>${value ?? ''}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            tableWrapper.innerHTML = html;
+        }
+
+        exportBtn.addEventListener('click', () => {
+            if (!workbook) return;
+
+            let htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report - ${currentSheet}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f8f9ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Report: ${currentSheet}</h1>
+        <p>Generated on ${new Date().toLocaleString()}</p>
+`;
+
+            Object.keys(workbook.Sheets).forEach(sheetName => {
+                const sheet = workbook.Sheets[sheetName];
+                const data = XLSX.utils.sheet_to_json(sheet);
+
+                htmlContent += `<h2>${sheetName}</h2>`;
+                if (data.length) {
+                    htmlContent += '<table><thead><tr>';
+                    Object.keys(data[0]).forEach(key => {
+                        htmlContent += `<th>${key}</th>`;
+                    });
+                    htmlContent += '</tr></thead><tbody>';
+                    data.forEach(row => {
+                        htmlContent += '<tr>';
+                        Object.values(row).forEach(value => {
+                            htmlContent += `<td>${value ?? ''}</td>`;
+                        });
+                        htmlContent += '</tr>';
+                    });
+                    htmlContent += '</tbody></table>';
+                }
+            });
+
+            htmlContent += `
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `report-${new Date().getTime()}.html`;
+            a.click();
+            displayStatus('✅ Report exported successfully!', 'success');
+        });
+    </script>
+</body>
+</html>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .upload-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f1ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #ede9fe;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .upload-area h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .upload-area p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .secondary-btn {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .secondary-btn:hover {
+            background: #d1d5db;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+            display: block;
+        }
+
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+            display: block;
+        }
+
+        .output-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .output-section.active {
+            display: block;
+        }
+
+        .output-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .sheet-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            overflow-x: auto;
+        }
+
+        .sheet-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sheet-tab:hover {
+            color: #667eea;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .sheet-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #f0f1ff;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 1px solid #667eea;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .download-link:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Report Generator</h1>
+            <p>Upload an Excel file to preview and convert it to an interactive HTML report</p>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <h3>Drag and drop your Excel file here</h3>
+                <p>or click to browse</p>
+                <p style="font-size: 12px; margin-top: 10px; color: #999;">Supported: .xlsx, .xls</p>
+            </div>
+            <input type="file" id="fileInput" accept=".xlsx,.xls" />
+            <div id="status" class="status"></div>
+            <div class="button-group">
+                <button id="selectFileBtn">📂 Select File</button>
+                <a href="sample-data.xlsx" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center;">
+                    ⬇️ Download Sample Data
+                </a>
+            </div>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <h2>📋 Excel Data Preview</h2>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Sheets</h3>
+                    <div class="value" id="sheetCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Rows</h3>
+                    <div class="value" id="rowCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Columns</h3>
+                    <div class="value" id="columnCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>File Name</h3>
+                    <div class="value" id="fileName" style="font-size: 14px; word-break: break-all;">-</div>
+                </div>
+            </div>
+
+            <div class="sheet-tabs" id="sheetTabs"></div>
+
+            <div class="table-wrapper" id="tableWrapper">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📄</div>
+                    <p>No data to display</p>
+                </div>
+            </div>
+
+            <button id="exportBtn" class="secondary-btn">💾 Export as HTML</button>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const status = document.getElementById('status');
+        const outputSection = document.getElementById('outputSection');
+        const sheetTabs = document.getElementById('sheetTabs');
+        const tableWrapper = document.getElementById('tableWrapper');
+        const sheetCount = document.getElementById('sheetCount');
+        const rowCount = document.getElementById('rowCount');
+        const columnCount = document.getElementById('columnCount');
+        const fileName = document.getElementById('fileName');
+        const exportBtn = document.getElementById('exportBtn');
+
+        let workbook = null;
+        let currentSheet = null;
+
+        // Click to upload
+        selectFileBtn.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) handleFile(files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    workbook = XLSX.read(e.target.result, { type: 'array' });
+                    displayStatus(`✅ Loaded "${file.name}" successfully!`, 'success');
+                    fileName.textContent = file.name;
+                    renderSheets();
+                    outputSection.classList.add('active');
+                } catch (error) {
+                    displayStatus(`❌ Error reading file: ${error.message}`, 'error');
+                }
+            };
+            reader.onerror = () => {
+                displayStatus('❌ Error reading file', 'error');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function displayStatus(msg, type) {
+            status.textContent = msg;
+            status.className = `status ${type}`;
+            if (type === 'success') {
+                setTimeout(() => status.className = 'status', 3000);
+            }
+        }
+
+        function renderSheets() {
+            sheetTabs.innerHTML = '';
+            sheetCount.textContent = workbook.SheetNames.length;
+
+            workbook.SheetNames.forEach((name, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = name;
+                btn.className = 'sheet-tab' + (index === 0 ? ' active' : '');
+                btn.onclick = () => selectSheet(name);
+                sheetTabs.appendChild(btn);
+            });
+
+            selectSheet(workbook.SheetNames[0]);
+        }
+
+        function selectSheet(sheetName) {
+            currentSheet = sheetName;
+            document.querySelectorAll('.sheet-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent === sheetName);
+            });
+            renderTable();
+        }
+
+        function renderTable() {
+            const sheet = workbook.Sheets[currentSheet];
+            const data = XLSX.utils.sheet_to_json(sheet);
+
+            if (!data.length) {
+                tableWrapper.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>This sheet is empty</p></div>';
+                return;
+            }
+
+            rowCount.textContent = data.length;
+            columnCount.textContent = Object.keys(data[0]).length;
+
+            let html = '<table><thead><tr>';
+            Object.keys(data[0]).forEach(key => {
+                html += `<th>${key}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            data.forEach(row => {
+                html += '<tr>';
+                Object.values(row).forEach(value => {
+                    html += `<td>${value ?? ''}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            tableWrapper.innerHTML = html;
+        }
+
+        exportBtn.addEventListener('click', () => {
+            if (!workbook) return;
+
+            let htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report - ${currentSheet}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f8f9ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Report: ${currentSheet}</h1>
+        <p>Generated on ${new Date().toLocaleString()}</p>
+`;
+
+            Object.keys(workbook.Sheets).forEach(sheetName => {
+                const sheet = workbook.Sheets[sheetName];
+                const data = XLSX.utils.sheet_to_json(sheet);
+
+                htmlContent += `<h2>${sheetName}</h2>`;
+                if (data.length) {
+                    htmlContent += '<table><thead><tr>';
+                    Object.keys(data[0]).forEach(key => {
+                        htmlContent += `<th>${key}</th>`;
+                    });
+                    htmlContent += '</tr></thead><tbody>';
+                    data.forEach(row => {
+                        htmlContent += '<tr>';
+                        Object.values(row).forEach(value => {
+                            htmlContent += `<td>${value ?? ''}</td>`;
+                        });
+                        htmlContent += '</tr>';
+                    });
+                    htmlContent += '</tbody></table>';
+                }
+            });
+
+            htmlContent += `
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `report-${new Date().getTime()}.html`;
+            a.click();
+            displayStatus('✅ Report exported successfully!', 'success');
+        });
+    </script>
+</body>
+</html>

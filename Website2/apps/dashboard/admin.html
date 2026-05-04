@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard — Mc'Harv Techlabs</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#060D1A;
+  --navy2:#0C1E35;
+  --navy3:#142848;
+  --navy4:#1A3258;
+  --gold:#D4A032;
+  --gold2:#F0BE56;
+  --gold3:#FFF0CC;
+  --white:#F4F1EA;
+  --text:#C8D8E8;
+  --muted:#7A95B0;
+  --border:rgba(212,160,50,0.2);
+  --border2:rgba(212,160,50,0.35);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;}
+
+/* GRID BG */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(212,160,50,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(212,160,50,0.04) 1px,transparent 1px);
+  background-size:72px 72px;
+  pointer-events:none;z-index:0;
+}
+
+/* Header */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:linear-gradient(135deg,var(--navy2),var(--navy3));
+  border-bottom:1.5px solid var(--border2);
+  backdrop-filter:blur(20px);
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+
+.header-content{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem 2.5rem;max-width:1600px;margin:0 auto;width:100%;
+}
+
+.header-left{display:flex;align-items:center;gap:2.5rem;}
+
+.header-logo{display:flex;align-items:center;gap:1rem;}
+.logo-icon{font-size:2rem;color:var(--gold);}
+.logo-text{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;text-transform:uppercase;color:var(--white);letter-spacing:2px;}
+
+.header-nav{display:flex;gap:2rem;list-style:none;}
+.header-nav a{font-size:.9rem;color:var(--muted);text-decoration:none;transition:color .2s;font-weight:600;letter-spacing:.5px;}
+.header-nav a:hover{color:var(--gold);}
+
+.header-right{display:flex;align-items:center;gap:1.5rem;}
+
+.user-info{display:flex;align-items:center;gap:.75rem;}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--navy);font-size:1rem;}
+.user-details{display:flex;flex-direction:column;}
+.user-name{font-size:.85rem;color:var(--white);font-weight:700;}
+.user-role{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+
+.logout-btn{
+  background:transparent;border:1.5px solid var(--gold);color:var(--gold);
+  padding:.6rem 1.2rem;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+  transition:all .2s;border-radius:4px;
+}
+.logout-btn:hover{background:var(--gold);color:var(--navy);}
+
+/* Layout */
+.container{display:flex;margin-top:75px;height:calc(100vh - 75px);}
+
+/* Sidebar */
+aside{
+  width:280px;background:linear-gradient(to bottom,var(--navy2),var(--navy3));
+  border-right:1.5px solid var(--border2);
+  overflow-y:auto;padding:2rem 0;
+  display:flex;flex-direction:column;gap:1rem;
+}
+
+aside::-webkit-scrollbar{width:5px;}
+aside::-webkit-scrollbar-track{background:transparent;}
+aside::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+.sidebar-section{
+  padding-top:1rem;
+  padding-bottom:.5rem;
+}
+
+.sidebar-section:first-child{padding-top:0;}
+
+.sidebar-title{
+  font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(212,160,50,.4);padding:.75rem 1.75rem .35rem;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+}
+
+.sidebar-link{
+  display:flex;align-items:center;gap:1rem;padding:1rem 1.75rem;
+  color:var(--muted);text-decoration:none;transition:all .2s;
+  border-left:4px solid transparent;margin:0 .75rem .5rem .75rem;
+  cursor:pointer;user-select:none;font-weight:600;letter-spacing:.5px;
+  border-radius:0 8px 8px 0;
+}
+
+.sidebar-link:hover{color:var(--gold);background:rgba(212,160,50,.08);}
+.sidebar-link.active{color:var(--white);background:linear-gradient(90deg,rgba(212,160,50,.2),transparent);border-left-color:var(--gold);}
+
+.sidebar-icon{font-size:1.3rem;width:24px;text-align:center;flex-shrink:0;}
+
+/* Main Content */
+main{flex:1;overflow-y:auto;padding:2.5rem;background:rgba(6,13,26,.3);}
+
+main::-webkit-scrollbar{width:6px;}
+main::-webkit-scrollbar-track{background:transparent;}
+main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* Page Title */
+.page-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:2.5rem;font-weight:900;
+  text-transform:uppercase;color:var(--white);margin-bottom:2.5rem;
+  letter-spacing:1px;display:flex;align-items:center;gap:1rem;
+}
+
+.page-title::before{content:'';width:5px;height:40px;background:var(--gold);border-radius:3px;}
+
+/* Dashboard Grid */
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2rem;margin-bottom:3rem;}
+
+.stat-card{
+  background:linear-gradient(135deg,rgba(212,160,50,.1),rgba(212,160,50,.02));
+  border:1.5px solid var(--border2);padding:2rem;border-radius:8px;
+  text-align:center;transition:all .3s;
+}
+
+.stat-card:hover{border-color:var(--gold);box-shadow:0 8px 32px rgba(212,160,50,.2);transform:translateY(-3px);}
+
+.stat-number{font-family:'Barlow Condensed',sans-serif;font-size:3.5rem;font-weight:900;color:var(--gold);line-height:1;}
+.stat-label{font-size:.9rem;text-transform:uppercase;color:var(--muted);margin-top:1rem;letter-spacing:1.5px;font-weight:600;}
+
+/* App Cards */
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:2rem;}
+
+.app-card{
+  background:linear-gradient(135deg,var(--navy3),var(--navy4));
+  border:1.5px solid var(--border2);border-radius:8px;overflow:hidden;
+  transition:all .3s;display:flex;flex-direction:column;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+
+.app-card:hover{border-color:var(--gold);box-shadow:0 12px 40px rgba(212,160,50,.25);transform:translateY(-4px);}
+
+.app-header{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);padding:1.5rem;display:flex;align-items:center;justify-content:space-between;
+}
+
+.app-header-left{display:flex;align-items:center;gap:1rem;}
+.app-icon{font-size:1.8rem;}
+.app-header-text h3{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;}
+.app-header-text p{font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.9;}
+
+.app-status{
+  background:rgba(0,0,0,.2);padding:.4rem .85rem;border-radius:4px;font-size:.75rem;
+  font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
+}
+
+.app-body{padding:1.5rem;flex:1;display:flex;flex-direction:column;}
+
+.app-desc{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;}
+
+.app-action{
+  margin-top:auto;padding:1rem;background:rgba(212,160,50,.1);border:1px solid var(--border2);
+  border-radius:4px;text-align:center;cursor:pointer;transition:all .2s;
+}
+
+.app-action:hover{background:rgba(212,160,50,.2);border-color:var(--gold);}
+
+.app-action-text{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+
+/* Iframe Container */
+.iframe-container{
+  background:linear-gradient(135deg,var(--navy3),var(--navy4));
+  border:1.5px solid var(--border2);border-radius:8px;padding:1.5rem;
+  margin-bottom:2rem;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+
+.iframe-header{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);padding:1rem 1.5rem;margin:-1.5rem -1.5rem 1.5rem -1.5rem;
+  display:flex;align-items:center;justify-content:space-between;border-radius:0;
+}
+
+.iframe-title{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;}
+
+.close-iframe{
+  background:rgba(0,0,0,.2);border:none;color:inherit;padding:.5rem 1rem;
+  cursor:pointer;font-weight:700;text-transform:uppercase;font-size:.8rem;
+  transition:all .2s;border-radius:4px;
+}
+
+.close-iframe:hover{background:rgba(0,0,0,.4);}
+
+.app-iframe{
+  width:100%;height:700px;border:1.5px solid var(--border2);
+  border-radius:4px;background:var(--navy3);
+}
+
+/* Modal */
+.modal{
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.8);align-items:center;justify-content:center;
+}
+
+.modal.open{display:flex;}
+
+.modal-content{
+  background:var(--navy2);border:1.5px solid var(--border2);
+  padding:2.5rem;max-width:500px;width:90%;border-radius:8px;
+  animation:modalIn .3s ease;
+}
+
+@keyframes modalIn{from{transform:scale(.95) translateY(20px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:1.8rem;font-weight:900;
+  text-transform:uppercase;color:var(--white);margin-bottom:1.5rem;letter-spacing:1px;}
+
+.modal-form{display:flex;flex-direction:column;gap:1.25rem;}
+
+.form-group{display:flex;flex-direction:column;gap:.5rem;}
+
+.form-group label{font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;}
+
+.form-group input,.form-group textarea{
+  background:rgba(6,13,26,.8);border:1.5px solid var(--border);
+  color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;
+  font-size:.9rem;outline:none;border-radius:4px;transition:border-color .2s;
+}
+
+.form-group input:focus,.form-group textarea:focus{border-color:var(--gold);}
+
+.modal-actions{display:flex;gap:1rem;margin-top:1.5rem;}
+
+.btn{
+  padding:.75rem 1.5rem;font-family:'Barlow Condensed',sans-serif;
+  font-size:.9rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  border:none;cursor:pointer;transition:all .2s;border-radius:4px;flex:1;
+}
+
+.btn-primary{background:var(--gold);color:var(--navy);}
+.btn-primary:hover{background:var(--gold2);}
+
+.btn-secondary{background:transparent;border:1.5px solid var(--border);color:var(--text);}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Responsive */
+@media(max-width:1200px){
+  .dashboard-grid{grid-template-columns:1fr;}
+  .apps-grid{grid-template-columns:1fr;}
+}
+
+@media(max-width:768px){
+  .container{flex-direction:column;margin-top:75px;}
+  aside{width:100%;border-right:none;border-bottom:1.5px solid var(--border2);padding:1rem 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem;}
+  .sidebar-section{padding-top:.5rem;padding-bottom:.25rem;}
+  .sidebar-link{margin:.25rem .5rem;padding:.75rem 1rem;font-size:.8rem;}
+  main{padding:1.5rem;}
+  .page-title{font-size:1.8rem;margin-bottom:1.5rem;}
+  .header-nav{display:none;}
+  .modal-content{width:95%;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-content">
+    <div class="header-left">
+      <div class="header-logo">
+        <div class="logo-icon">⚙️</div>
+        <div class="logo-text">Admin Dashboard</div>
+      </div>
+      <nav class="header-nav">
+        <a href="main.html" target="_blank">← Back to Website</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <div class="user-avatar">A</div>
+        <div class="user-details">
+          <div class="user-name">Admin</div>
+          <div class="user-role">Manager</div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</header>
+
+<!-- Main Container -->
+<div class="container">
+  <!-- Sidebar -->
+  <aside>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Dashboard</div>
+      <a class="sidebar-link active" onclick="showSection('dashboard')">
+        <span class="sidebar-icon">📊</span>
+        <span>Overview</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Applications</div>
+      <a class="sidebar-link" onclick="showSection('invoice')">
+        <span class="sidebar-icon">📄</span>
+        <span>Invoice Generator</span>
+      </a>
+      <a class="sidebar-link" onclick="showSection('report')">
+        <span class="sidebar-icon">📈</span>
+        <span>Report Generator</span>
+      </a>
+      <a class="sidebar-link" onclick="showSection('resume')">
+        <span class="sidebar-icon">👤</span>
+        <span>Resume Builder</span>
+      </a>
+      <a class="sidebar-link" onclick="showSection('tds')">
+        <span class="sidebar-icon">💰</span>
+        <span>TDS Manager</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Management</div>
+      <a class="sidebar-link" onclick="showSection('reviews')">
+        <span class="sidebar-icon">⭐</span>
+        <span>Reviews</span>
+      </a>
+      <a class="sidebar-link" onclick="showSection('documents')">
+        <span class="sidebar-icon">📎</span>
+        <span>Documents</span>
+      </a>
+      <a class="sidebar-link" onclick="showSection('opportunities')">
+        <span class="sidebar-icon">💼</span>
+        <span>Opportunities</span>
+      </a>
+      <a class="sidebar-link" onclick="showSection('settings')">
+        <span class="sidebar-icon">⚙️</span>
+        <span>Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="section active">
+      <div class="page-title">Dashboard</div>
+
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Active Applications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">System Status</div>
+        </div>
+      </div>
+
+      <div class="page-title" style="margin-top:3rem;font-size:1.8rem;">Quick Access</div>
+
+      <div class="apps-grid">
+        <!-- Invoice Generator -->
+        <div class="app-card">
+          <div class="app-header">
+            <div class="app-header-left">
+              <div class="app-icon">📄</div>
+              <div class="app-header-text">
+                <h3>Invoice Generator</h3>
+                <p>Professional invoicing</p>
+              </div>
+            </div>
+            <div class="app-status">Active</div>
+          </div>
+          <div class="app-body">
+            <p class="app-desc">Create, manage, and generate professional invoices with custom templates and multiple output formats.</p>
+            <div class="app-action" onclick="openApp('invoice')">
+              <div class="app-action-text">Launch Application →</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report Generator -->
+        <div class="app-card">
+          <div class="app-header">
+            <div class="app-header-left">
+              <div class="app-icon">📈</div>
+              <div class="app-header-text">
+                <h3>Report Generator</h3>
+                <p>Advanced reporting</p>
+              </div>
+            </div>
+            <div class="app-status">Active</div>
+          </div>
+          <div class="app-body">
+            <p class="app-desc">Generate comprehensive business reports with charts, data analysis, and professional formatting for presentations.</p>
+            <div class="app-action" onclick="openApp('report')">
+              <div class="app-action-text">Launch Application →</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume Builder -->
+        <div class="app-card">
+          <div class="app-header">
+            <div class="app-header-left">
+              <div class="app-icon">👤</div>
+              <div class="app-header-text">
+                <h3>Resume Builder</h3>
+                <p>Career tools</p>
+              </div>
+            </div>
+            <div class="app-status">Active</div>
+          </div>
+          <div class="app-body">
+            <p class="app-desc">Build professional resumes and CVs with ATS optimization, multiple templates, and instant downloads in various formats.</p>
+            <div class="app-action" onclick="openApp('resume')">
+              <div class="app-action-text">Launch Application →</div>
+            </div>
+          </div>
+        </div>
+        <!-- TDS Manager -->
+        <div class="app-card">
+          <div class="app-header">
+            <div class="app-header-left">
+              <div class="app-icon">💰</div>
+              <div class="app-header-text">
+                <h3>TDS Manager</h3>
+                <p>Tax management</p>
+              </div>
+            </div>
+            <div class="app-status">Active</div>
+          </div>
+          <div class="app-body">
+            <p class="app-desc">Manage TDS (Tax Deducted at Source) calculations, compliance tracking, and financial records for FY 2025-26.</p>
+            <div class="app-action" onclick="openApp('tds')">
+              <div class="app-action-text">Launch Application →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Invoice Section -->
+    <section id="invoice-section" class="section">
+      <div class="page-title">Invoice Generator</div>
+      <div class="iframe-container">
+        <div class="iframe-header">
+          <div class="iframe-title">Invoice Generator Application</div>
+          <button class="close-iframe" onclick="closeApp()">Close</button>
+        </div>
+        <iframe class="app-iframe" src="./InvoiceGenerator/index.html"></iframe>
+      </div>
+    </section>
+
+    <!-- Report Section -->
+    <section id="report-section" class="section">
+      <div class="page-title">Report Generator</div>
+      <div class="iframe-container">
+        <div class="iframe-header">
+          <div class="iframe-title">Report Generator Application</div>
+          <button class="close-iframe" onclick="closeApp()">Close</button>
+        </div>
+        <iframe class="app-iframe" src="./ReportGenerator/index.html"></iframe>
+      </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume-section" class="section">
+      <div class="page-title">Resume Builder</div>
+      <div class="iframe-container">
+        <div class="iframe-header">
+          <div class="iframe-title">Resume Builder Application</div>
+          <button class="close-iframe" onclick="closeApp()">Close</button>
+        </div>
+        <iframe class="app-iframe" src="./Resume Builder App/index.html"></iframe>
+      </div>
+    </section>
+
+    <!-- TDS Manager Section -->
+    <section id="tds-section" class="section">
+      <div class="page-title">TDS Manager</div>
+      <div class="iframe-container">
+        <div class="iframe-header">
+          <div class="iframe-title">TDS Manager Application</div>
+          <button class="close-iframe" onclick="closeApp()">Close</button>
+        </div>
+        <iframe class="app-iframe" src="./TDS_Manager.html"></iframe>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews-section" class="section">
+      <div class="page-title">Reviews & Testimonials</div>
+      <div style="max-width:800px;">
+        <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:2rem;margin-bottom:2rem;">
+          <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem;">✉ Invite Someone to Write a Review</h3>
+          <form onsubmit="sendReviewInvite(event)" style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Reviewer Name</label>
+                <input type="text" id="inv-name" placeholder="John Smith" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;" required/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Email Address</label>
+                <input type="email" id="inv-email" placeholder="john@example.com" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;" required/>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Invite</button>
+          </form>
+        </div>
+        <div id="reviews-content"></div>
+      </div>
+    </section>
+
+    <!-- Documents Section -->
+    <section id="documents-section" class="section">
+      <div class="page-title">Document Management</div>
+      <div style="max-width:800px;">
+        <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:2rem;margin-bottom:2rem;">
+          <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem;">📎 Upload New Document</h3>
+          <form onsubmit="uploadDocument(event)" style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Document Name</label>
+                <input type="text" id="doc-name" placeholder="Company Brochure" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;" required/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Icon (emoji)</label>
+                <input type="text" id="doc-icon" placeholder="📄" maxlength="4" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Description</label>
+              <textarea id="doc-desc" placeholder="Brief description of this document..." style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;min-height:100px;"></textarea>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">File (PDF / Image)</label>
+              <input type="file" id="doc-file" accept=".pdf,.jpg,.jpeg,.png" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload Document</button>
+          </form>
+        </div>
+        <div id="documents-content"></div>
+      </div>
+    </section>
+
+    <!-- Opportunities Section -->
+    <section id="opportunities-section" class="section">
+      <div class="page-title">Opportunities Management</div>
+      <div style="max-width:800px;">
+        <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:2rem;margin-bottom:2rem;">
+          <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem;">➕ Add New Opportunity</h3>
+          <form onsubmit="addOpportunity(event)" style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Title</label>
+                <input type="text" id="opp-title" placeholder="Senior Developer" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;" required/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Type</label>
+                <select id="opp-type" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;">
+                  <option>Full-time</option>
+                  <option>Part-time</option>
+                  <option>Contract</option>
+                  <option>Partnership</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Location</label>
+                <input type="text" id="opp-loc" placeholder="UK / Remote" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Department</label>
+                <input type="text" id="opp-dept" placeholder="Engineering" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Description</label>
+              <textarea id="opp-desc" placeholder="Role overview..." style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;min-height:100px;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Opportunity</button>
+          </form>
+        </div>
+        <div id="opportunities-content"></div>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings-section" class="section">
+      <div class="page-title">Site Settings</div>
+      <div style="max-width:800px;">
+        <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:2rem;margin-bottom:2rem;">
+          <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem;">🏢 Company Information</h3>
+          <form style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Company Name</label>
+                <input type="text" id="site-name" value="Mc'Harv Techlabs" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Tagline</label>
+                <input type="text" id="site-tag" value="Innovate. Support. Grow." style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Phone</label>
+                <input type="text" id="site-phone" value="+44 7771 090667" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Email</label>
+                <input type="email" id="site-email" value="info@mcharvtechlabs.com" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal for Login -->
+<div id="loginModal" class="modal open">
+  <div class="modal-content">
+    <div class="modal-title">Admin Login</div>
+    <form class="modal-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="passwordInput" placeholder="Enter admin password" required>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+    <div id="loginError" style="color:#ff6b6b;font-size:.85rem;margin-top:1rem;text-align:center;display:none;">Invalid password</div>
+  </div>
+</div>
+
+<script>
+const ADMIN_PASSWORD = 'mcharv2025';
+
+// State Management
+function getState(key, def) {
+  try {
+    const v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : def;
+  } catch {
+    return def;
+  }
+}
+
+function setState(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch {}
+}
+
+// Initialize default data
+const DEFAULT_REVIEWS = [
+  { id: 'r1', name: 'Rajesh Kumar', company: 'SME Owner, UK', rating: 5, text: "Mc'Harv completely transformed our IT operations.", status: 'approved' },
+  { id: 'r2', name: 'Priya Menon', company: 'Tech Lead, India', rating: 5, text: "The training programs upskilled our entire team.", status: 'approved' },
+];
+
+if (!localStorage.getItem('mh_reviews')) setState('mh_reviews', DEFAULT_REVIEWS);
+if (!localStorage.getItem('mh_documents')) setState('mh_documents', []);
+if (!localStorage.getItem('mh_opportunities')) setState('mh_opportunities', []);
+
+// Login
+function handleLogin(e) {
+  e.preventDefault();
+  const password = document.getElementById('passwordInput').value;
+  
+  if (password === ADMIN_PASSWORD) {
+    document.getElementById('loginModal').classList.remove('open');
+    sessionStorage.setItem('adminLoggedIn', 'true');
+    loadAllData();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('adminLoggedIn');
+  document.getElementById('loginModal').classList.add('open');
+  document.getElementById('passwordInput').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+// Check login
+window.addEventListener('load', () => {
+  if (!sessionStorage.getItem('adminLoggedIn')) {
+    document.getElementById('loginModal').classList.add('open');
+  } else {
+    document.getElementById('loginModal').classList.remove('open');
+    loadAllData();
+  }
+});
+
+// Section Management
+function showSection(sectionName) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(sectionName + '-section').classList.add('active');
+  
+  document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+  event.target.closest('.sidebar-link').classList.add('active');
+  
+  document.querySelector('main').scrollTop = 0;
+}
+
+function openApp(appName) {
+  showSection(appName);
+}
+
+function closeApp() {
+  showSection('dashboard');
+}
+
+// Load all admin data
+function loadAllData() {
+  loadReviews();
+  loadDocuments();
+  loadOpportunities();
+}
+
+// Reviews Management
+function loadReviews() {
+  const reviews = getState('mh_reviews', []);
+  const pending = reviews.filter(r => r.status === 'pending' || r.status === 'invited');
+  const approved = reviews.filter(r => r.status === 'approved');
+  
+  let html = '<div class="adm-section-title" style="font-size:1.1rem;margin-top:2rem;">Pending Reviews</div>';
+  if (!pending.length) {
+    html += '<div style="color:var(--muted);font-style:italic;padding:1rem;">No pending reviews.</div>';
+  } else {
+    html += pending.map(r => `
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;border-radius:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+          <strong style="color:var(--white);">${r.name}</strong>
+          <span style="font-size:.7rem;background:rgba(255,165,0,.15);color:orange;padding:.25rem .6rem;border-radius:3px;text-transform:uppercase;">${r.status}</span>
+        </div>
+        ${r.email ? `<div style="font-size:.85rem;color:var(--muted);margin-bottom:.5rem;">${r.email}</div>` : ''}
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn btn-primary" style="flex:1;padding:.6rem;font-size:.8rem;" onclick="approveReview('${r.id}')">✓ Approve</button>
+          <button class="btn btn-secondary" style="flex:1;padding:.6rem;font-size:.8rem;" onclick="rejectReview('${r.id}')">✗ Reject</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  html += '<div class="adm-section-title" style="font-size:1.1rem;margin-top:2rem;">Approved Reviews (Live)</div>';
+  if (!approved.length) {
+    html += '<div style="color:var(--muted);font-style:italic;padding:1rem;">No approved reviews yet.</div>';
+  } else {
+    html += approved.map(r => `
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;border-radius:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+          <strong style="color:var(--white);">${r.name}</strong>
+          <span style="color:var(--gold);">${'★'.repeat(r.rating)}</span>
+        </div>
+        <div style="color:var(--text);font-style:italic;margin-bottom:.75rem;">"${r.text}"</div>
+        <button class="btn btn-secondary" style="padding:.5rem 1rem;font-size:.8rem;" onclick="rejectReview('${r.id}')">Remove</button>
+      </div>
+    `).join('');
+  }
+  
+  document.getElementById('reviews-content').innerHTML = html;
+}
+
+function sendReviewInvite(e) {
+  e.preventDefault();
+  const name = document.getElementById('inv-name').value.trim();
+  const email = document.getElementById('inv-email').value.trim();
+  
+  if (!name || !email) {
+    alert('Please enter name and email');
+    return;
+  }
+  
+  const reviews = getState('mh_reviews', []);
+  reviews.push({ id: 'r' + Date.now(), name, email, company: '', rating: 5, text: '', status: 'invited' });
+  setState('mh_reviews', reviews);
+  
+  document.getElementById('inv-name').value = '';
+  document.getElementById('inv-email').value = '';
+  alert('✓ Invitation sent to ' + name);
+  loadReviews();
+}
+
+function approveReview(id) {
+  let reviews = getState('mh_reviews', []);
+  reviews = reviews.map(r => r.id === id ? { ...r, status: 'approved' } : r);
+  setState('mh_reviews', reviews);
+  loadReviews();
+}
+
+function rejectReview(id) {
+  if (!confirm('Remove this review?')) return;
+  let reviews = getState('mh_reviews', []).filter(r => r.id !== id);
+  setState('mh_reviews', reviews);
+  loadReviews();
+}
+
+// Documents Management
+function loadDocuments() {
+  const docs = getState('mh_documents', []);
+  
+  let html = '';
+  if (!docs.length) {
+    html = '<div style="color:var(--muted);font-style:italic;padding:1rem;">No documents uploaded yet.</div>';
+  } else {
+    html = docs.map(d => `
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;border-radius:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+          <div><span style="font-size:1.5rem;">${d.icon || '📄'}</span> <strong style="color:var(--white);">${d.name}</strong></div>
+          <span style="font-size:.7rem;background:${d.visible ? 'rgba(80,200,80,.15)' : 'rgba(200,100,100,.15)'};color:${d.visible ? '#50c850' : '#ff8080'};padding:.25rem .6rem;border-radius:3px;text-transform:uppercase;">${d.visible ? 'Visible' : 'Hidden'}</span>
+        </div>
+        <div style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">${d.description}</div>
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn btn-secondary" style="flex:1;padding:.5rem;font-size:.75rem;" onclick="toggleDocVisibility('${d.id}')">${d.visible ? 'Hide' : 'Show'}</button>
+          <button class="btn btn-secondary" style="flex:1;padding:.5rem;font-size:.75rem;" onclick="deleteDocument('${d.id}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  document.getElementById('documents-content').innerHTML = html;
+}
+
+function uploadDocument(e) {
+  e.preventDefault();
+  const name = document.getElementById('doc-name').value.trim();
+  const icon = document.getElementById('doc-icon').value.trim() || '📄';
+  const desc = document.getElementById('doc-desc').value.trim();
+  const fileInp = document.getElementById('doc-file');
+  
+  if (!name) {
+    alert('Please enter a document name');
+    return;
+  }
+  
+  const doc = { id: 'd' + Date.now(), name, icon, description: desc, visible: true };
+  
+  if (fileInp.files.length) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      doc.url = e.target.result;
+      const docs = getState('mh_documents', []);
+      docs.push(doc);
+      setState('mh_documents', docs);
+      document.getElementById('doc-name').value = '';
+      document.getElementById('doc-desc').value = '';
+      document.getElementById('doc-icon').value = '';
+      fileInp.value = '';
+      loadDocuments();
+    };
+    reader.readAsDataURL(fileInp.files[0]);
+  } else {
+    const docs = getState('mh_documents', []);
+    docs.push(doc);
+    setState('mh_documents', docs);
+    document.getElementById('doc-name').value = '';
+    document.getElementById('doc-desc').value = '';
+    document.getElementById('doc-icon').value = '';
+    loadDocuments();
+  }
+}
+
+function toggleDocVisibility(id) {
+  let docs = getState('mh_documents', []);
+  docs = docs.map(d => d.id === id ? { ...d, visible: !d.visible } : d);
+  setState('mh_documents', docs);
+  loadDocuments();
+}
+
+function deleteDocument(id) {
+  if (!confirm('Delete this document?')) return;
+  let docs = getState('mh_documents', []).filter(d => d.id !== id);
+  setState('mh_documents', docs);
+  loadDocuments();
+}
+
+// Opportunities Management
+function loadOpportunities() {
+  const opps = getState('mh_opportunities', []);
+  const pending = opps.filter(o => o.status === 'pending');
+  const approved = opps.filter(o => o.status === 'approved');
+  
+  let html = '<div class="adm-section-title" style="font-size:1.1rem;margin-top:2rem;">Pending Opportunities</div>';
+  if (!pending.length) {
+    html += '<div style="color:var(--muted);font-style:italic;padding:1rem;">No pending opportunities.</div>';
+  } else {
+    html += pending.map(o => `
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;border-radius:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+          <div><strong style="color:var(--white);">${o.title}</strong> <span style="font-size:.8rem;color:var(--muted);">📍 ${o.location}</span></div>
+          <span style="font-size:.7rem;background:rgba(255,165,0,.15);color:orange;padding:.25rem .6rem;border-radius:3px;text-transform:uppercase;">${o.type}</span>
+        </div>
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn btn-primary" style="flex:1;padding:.6rem;font-size:.8rem;" onclick="approveOpportunity('${o.id}')">✓ Go Live</button>
+          <button class="btn btn-secondary" style="flex:1;padding:.6rem;font-size:.8rem;" onclick="deleteOpportunity('${o.id}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  html += '<div class="adm-section-title" style="font-size:1.1rem;margin-top:2rem;">Live Opportunities</div>';
+  if (!approved.length) {
+    html += '<div style="color:var(--muted);font-style:italic;padding:1rem;">No live opportunities.</div>';
+  } else {
+    html += approved.map(o => `
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;border-radius:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+          <div><strong style="color:var(--white);">${o.title}</strong> <span style="font-size:.8rem;color:var(--muted);">📍 ${o.location}</span></div>
+          <span style="font-size:.7rem;background:rgba(80,200,80,.15);color:#50c850;padding:.25rem .6rem;border-radius:3px;text-transform:uppercase;">Live</span>
+        </div>
+        <button class="btn btn-secondary" style="padding:.5rem 1rem;font-size:.8rem;" onclick="deleteOpportunity('${o.id}')">Remove</button>
+      </div>
+    `).join('');
+  }
+  
+  document.getElementById('opportunities-content').innerHTML = html;
+}
+
+function addOpportunity(e) {
+  e.preventDefault();
+  const title = document.getElementById('opp-title').value.trim();
+  
+  if (!title) {
+    alert('Please enter a title');
+    return;
+  }
+  
+  const opps = getState('mh_opportunities', []);
+  opps.push({
+    id: 'o' + Date.now(),
+    title,
+    type: document.getElementById('opp-type').value,
+    location: document.getElementById('opp-loc').value || 'UK',
+    department: document.getElementById('opp-dept').value || 'General',
+    description: document.getElementById('opp-desc').value || '',
+    status: 'pending'
+  });
+  setState('mh_opportunities', opps);
+  
+  document.getElementById('opp-title').value = '';
+  document.getElementById('opp-loc').value = '';
+  document.getElementById('opp-dept').value = '';
+  document.getElementById('opp-desc').value = '';
+  
+  loadOpportunities();
+}
+
+function approveOpportunity(id) {
+  let opps = getState('mh_opportunities', []);
+  opps = opps.map(o => o.id === id ? { ...o, status: 'approved' } : o);
+  setState('mh_opportunities', opps);
+  loadOpportunities();
+}
+
+function deleteOpportunity(id) {
+  if (!confirm('Remove this opportunity?')) return;
+  let opps = getState('mh_opportunities', []).filter(o => o.id !== id);
+  setState('mh_opportunities', opps);
+  loadOpportunities();
+}
+
+function saveSettings() {
+  const settings = {
+    name: document.getElementById('site-name').value,
+    tagline: document.getElementById('site-tag').value,
+    phone: document.getElementById('site-phone').value,
+    email: document.getElementById('site-email').value,
+  };
+  setState('mh_settings', settings);
+  alert('✓ Settings saved successfully!');
+}
+
+// Add CSS for active section display
+const style = document.createElement('style');
+style.textContent = `
+  .section { display: none; }
+  .section.active { display: block; }
+`;
+document.head.appendChild(style);
+</script>
+
+</body>
+</html>

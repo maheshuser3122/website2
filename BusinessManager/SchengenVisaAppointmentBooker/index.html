@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schengen Visa Appointment Booker - AI Powered</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="../BusinessManager/index.html" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+                <h1><i class="fas fa-passport"></i> Schengen Visa Appointment Booker</h1>
+                <div class="header-right">
+                    <button class="ai-assistant-btn" id="aiToggle" title="AI Assistant">
+                        <i class="fas fa-robot"></i> AI Helper
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-body">
+            <div class="content-wrapper">
+                <!-- Sidebar Navigation -->
+                <aside class="sidebar">
+                    <nav class="nav-tabs">
+                        <button class="nav-tab active" data-tab="search" onclick="switchTab('search')">
+                            <i class="fas fa-search"></i> <span>Search</span>
+                        </button>
+                        <button class="nav-tab" data-tab="bookings" onclick="switchTab('bookings')">
+                            <i class="fas fa-clipboard-list"></i> <span>My Bookings</span>
+                        </button>
+                        <button class="nav-tab" data-tab="recommendations" onclick="switchTab('recommendations')">
+                            <i class="fas fa-lightbulb"></i> <span>Smart Tips</span>
+                        </button>
+                        <button class="nav-tab" data-tab="notifications" onclick="switchTab('notifications')">
+                            <i class="fas fa-bell"></i> <span>Notifications</span>
+                            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Main Content Tabs -->
+                <div class="main-content">
+                    <!-- Search & Book Tab -->
+                    <section class="content-tab active" id="tab-search">
+                        <div class="section-header">
+                            <h2>Find & Book Your Appointment</h2>
+                            <p>Use AI-powered search to find the best appointment for your needs</p>
+                        </div>
+
+                        <div class="search-controls">
+                            <div class="form-group">
+                                <label for="country">Select Country:</label>
+                                <select id="country" onchange="populateVisaTypes(); updateRecommendedSlots()">
+                                    <option value="">-- Select a Schengen Country --</option>
+                                    <optgroup label="Northern Europe">
+                                        <option value="denmark">Denmark (Copenhagen)</option>
+                                        <option value="finland">Finland (Helsinki)</option>
+                                        <option value="iceland">Iceland (Reykjavik)</option>
+                                        <option value="norway">Norway (Oslo)</option>
+                                        <option value="sweden">Sweden (Stockholm)</option>
+                                    </optgroup>
+                                    <optgroup label="Western Europe">
+                                        <option value="belgium">Belgium (Brussels)</option>
+                                        <option value="france">France (Paris)</option>
+                                        <option value="luxembourg">Luxembourg (City)</option>
+                                        <option value="netherlands">Netherlands (Amsterdam)</option>
+                                    </optgroup>
+                                    <optgroup label="Central Europe">
+                                        <option value="austria">Austria (Vienna)</option>
+                                        <option value="czechrepublic">Czech Republic (Prague)</option>
+                                        <option value="germany">Germany (Berlin)</option>
+                                        <option value="hungary">Hungary (Budapest)</option>
+                                        <option value="poland">Poland (Warsaw)</option>
+                                        <option value="slovakia">Slovakia (Bratislava)</option>
+                                        <option value="slovenia">Slovenia (Ljubljana)</option>
+                                    </optgroup>
+                                    <optgroup label="Southern Europe">
+                                        <option value="croatia">Croatia (Zagreb)</option>
+                                        <option value="greece">Greece (Athens)</option>
+                                        <option value="italy">Italy (Rome)</option>
+                                        <option value="malta">Malta (Valletta)</option>
+                                        <option value="portugal">Portugal (Lisbon)</option>
+                                        <option value="spain">Spain (Madrid)</option>
+                                    </optgroup>
+                                    <optgroup label="Balkans">
+                                        <option value="romania">Romania (Bucharest)</option>
+                                        <option value="bulgaria">Bulgaria (Sofia)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="visaType">Visa Type:</label>
+                                <select id="visaType" onchange="updateRecommendedSlots()">
+                                    <option value="">-- Select Visa Type --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="preferredDate">Preferred Date Range:</label>
+                                <select id="preferredDate" onchange="updateRecommendedSlots()">
+                                    <option value="">-- Any Time --</option>
+                                    <option value="week">Next 7 Days</option>
+                                    <option value="month">Next 30 Days</option>
+                                    <option value="3months">Next 3 Months</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="searchAppointments()">
+                                <i class="fas fa-search"></i> Search Appointments
+                            </button>
+                        </div>
+
+                        <!-- AI Recommended Slot -->
+                        <div class="ai-recommendation-box" id="aiRecommendation" style="display: none;">
+                            <div class="recommendation-header">
+                                <i class="fas fa-brain"></i> AI Recommendation
+                            </div>
+                            <div class="recommendation-content">
+                                <p id="recommendationText"></p>
+                                <button class="btn btn-success" onclick="bookRecommendedSlot()" style="margin-top: 10px;">
+                                    <i class="fas fa-check"></i> Book This Slot
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Available Appointments Grid -->
+                        <div class="appointments-grid" id="appointmentsGrid" style="display: none;">
+                            <div class="grid-header">
+                                <h3>Available Appointments</h3>
+                                <span class="slot-count" id="slotCount">0 slots available</span>
+                            </div>
+                            <div id="appointmentsList" class="appointment-slots"></div>
+                        </div>
+
+                        <!-- No Results -->
+                        <div class="empty-state" id="emptyState" style="display: none;">
+                            <i class="fas fa-inbox"></i>
+                            <h3>No Appointments Found</h3>
+                            <p>Try adjusting your search criteria or select a different date range</p>
+                        </div>
+                    </section>
+
+                    <!-- Bookings Management Tab -->
+                    <section class="content-tab" id="tab-bookings">
+                        <div class="section-header">
+                            <h2>My Bookings</h2>
+                            <p>Manage your appointments, reschedule or cancel as needed</p>
+                        </div>
+
+                        <div id="bookingsList" class="bookings-list"></div>
+
+                        <div class="empty-state" id="noBookings" style="display: none;">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>No Bookings Yet</h3>
+                            <p>Start by searching for available appointments</p>
+                            <button class="btn btn-primary" onclick="switchTab('search')">
+                                <i class="fas fa-search"></i> Search Now
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Smart Recommendations Tab -->
+                    <section class="content-tab" id="tab-recommendations">
+                        <div class="section-header">
+                            <h2>Smart Tips</h2>
+                            <p>AI-powered recommendations to help your Schengen visa process</p>
+                        </div>
+
+                        <div class="recommendations-container" id="recommendationsContainer">
+                            <div class="tip-card">
+                                <div class="tip-icon"><i class="fas fa-hourglass-start"></i></div>
+                                <h3>Best Time to Apply</h3>
+                                <p>Peak season for Schengen visas is usually March-June. Book 2-3 months before your travel date.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <h3>Fastest Appointments</h3>
+                                <p>Tuesday-Thursday mornings typically have shorter waiting times. Avoid Mondays and Fridays.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon"><i class="fas fa-map"></i></div>
+                                <h3>Country Selection</h3>
+                                <p>Apply at the embassy of your main destination. If equal, choose the country you enter first.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon"><i class="fas fa-file-upload"></i></div>
+                                <h3>Document Preparation</h3>
+                                <p>Have all documents ready before booking. Common issues: outdated passport, missing financial proof.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon"><i class="fas fa-mobile-alt"></i></div>
+                                <h3>Pre-Appointment Steps</h3>
+                                <p>Enable notifications for appointment reminders. Download and fill your visa application form online first.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon"><i class="fas fa-sync"></i></div>
+                                <h3>Cancellation Watcher</h3>
+                                <p>Opt-in to alerts for cancellations. Earlier appointments are often released by other applicants.</p>
+                            </div>
+                        </div>
+
+                        <div class="ai-chat-inline">
+                            <div class="chat-message bot-message">
+                                <i class="fas fa-robot"></i>
+                                <p>💡 <strong>Pro Tip:</strong> Based on your profile, I recommend checking early mornings (8-9 AM) on Wednesdays for free slots. Most cancellations happen 24-48 hours before appointments.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Notifications Tab -->
+                    <section class="content-tab" id="tab-notifications">
+                        <div class="section-header">
+                            <h2>Notifications & Reminders</h2>
+                        </div>
+
+                        <div class="notification-settings">
+                            <h3>Notification Settings</h3>
+                            <div class="setting-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="appointmentReminder" checked>
+                                    <span>Appointment reminders (24 hours before)</span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="cancellationAlerts" checked>
+                                    <span>Cancellation alerts (new slots available)</span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="weatherAlerts" checked>
+                                    <span>Weather alerts for appointment days</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="notifications-list" id="notificationsList">
+                            <div class="notification-item info">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Welcome to Schengen Visa Appointment Booker! Enable notifications to stay updated.</span>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Assistant Chatbot -->
+    <div class="ai-chatbot" id="aiChatbot">
+        <div class="chatbot-header">
+            <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+            <button class="close-btn" onclick="toggleAIAssistant()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chat-message bot-message">
+                <i class="fas fa-robot"></i>
+                <p>Hi! I'm your Schengen Visa AI Assistant. I can help you find the best appointment, answer questions about visa requirements, and provide personalized recommendations. What can I help you with today?</p>
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="userQuery" placeholder="Ask me anything about Schengen visas..." onkeypress="handleChatInput(event)">
+            <button onclick="sendChatMessage()" class="btn-send">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Complete Your Booking</h2>
+                <button class="modal-close" onclick="closeBookingModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-details" id="bookingDetails"></div>
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passportNumber">Passport Number:</label>
+                        <input type="text" id="passportNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
+                <button class="btn btn-success" onclick="confirmBooking()">
+                    <i class="fas fa-check"></i> Confirm Booking
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+        <button class="toast-close" onclick="closeToast()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

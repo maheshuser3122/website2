@@ -1,0 +1,632 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mc'Harv Techlabs - Smart Resume Builder</title>
+    <link rel="icon" type="image/x-icon" href="https://mcharvtechlabs.com/favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Libraries for Word document handling -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.2/docx.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="brand-logo">
+                    <span class="brand-mc">Mc'Harv</span>
+                    <span class="brand-tech">Techlabs</span>
+                </div>
+                <h1>Smart Resume Builder</h1>
+                <span class="ai-badge"><i class="fas fa-robot"></i> AI-Powered</span>
+            </div>
+            <p class="tagline">Enhancing Your Career Experience Together</p>
+            <p class="sub-tagline">AI-powered resume tailoring to match any job description</p>
+        </header>
+
+        <!-- AI Configuration Bar -->
+        <div class="ai-config-bar" id="aiConfigBar">
+            <div class="ai-config-content">
+                <div class="ai-status" id="aiStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>AI: Not Connected</span>
+                </div>
+                <button class="ai-config-btn" onclick="toggleAISettings()">
+                    <i class="fas fa-cog"></i> Configure AI
+                </button>
+            </div>
+            <div class="ai-settings-panel" id="aiSettingsPanel" style="display: none;">
+                <div class="ai-settings-content">
+                    <h4><i class="fas fa-key"></i> OpenAI API Configuration</h4>
+                    <p class="ai-settings-note">Enter your OpenAI API key to enable AI-powered resume optimization. Your key is stored locally and never sent to our servers.</p>
+                    <div class="api-key-input-group">
+                        <input type="password" id="openaiApiKey" placeholder="sk-..." autocomplete="off">
+                        <button onclick="toggleApiKeyVisibility()" class="toggle-visibility-btn">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="ai-model-select">
+                        <label>AI Model:</label>
+                        <select id="aiModel">
+                            <option value="gpt-4o-mini">GPT-4o Mini (Fast & Affordable)</option>
+                            <option value="gpt-4o">GPT-4o (Most Capable)</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Budget)</option>
+                        </select>
+                    </div>
+                    <div class="ai-settings-actions">
+                        <button class="btn btn-primary btn-sm" onclick="saveAndTestApiKey()">
+                            <i class="fas fa-check"></i> Save & Test Connection
+                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="clearApiKey()">
+                            <i class="fas fa-trash"></i> Clear Key
+                        </button>
+                    </div>
+                    <div id="apiTestResult" class="api-test-result"></div>
+                    <div class="ai-features-list">
+                        <h5>AI Features Enabled:</h5>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Intelligent bullet point rewriting</li>
+                            <li><i class="fas fa-check-circle"></i> ATS-optimized keyword integration</li>
+                            <li><i class="fas fa-check-circle"></i> Professional summary generation</li>
+                            <li><i class="fas fa-check-circle"></i> Skills gap analysis</li>
+                            <li><i class="fas fa-check-circle"></i> Achievement quantification suggestions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-container">
+            <div class="progress-step active" data-step="1">
+                <div class="step-number">1</div>
+                <span>Job Description</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="2">
+                <div class="step-number">2</div>
+                <span>Your Resume</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="3">
+                <div class="step-number">3</div>
+                <span>Supporting Docs</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="4">
+                <div class="step-number">4</div>
+                <span>Generate</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Step 1: Job Description -->
+            <section class="step-section active" id="step1">
+                <div class="section-header">
+                    <h2><i class="fas fa-briefcase"></i> Job Description</h2>
+                    <p>Paste the job posting you're applying for</p>
+                </div>
+                <div class="input-group">
+                    <label for="jobTitle">Job Title</label>
+                    <input type="text" id="jobTitle" placeholder="e.g., Software Engineer, Marketing Manager">
+                </div>
+                <div class="input-group">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" id="companyName" placeholder="e.g., Google, Microsoft">
+                </div>
+                <div class="input-group">
+                    <label for="jobDescription">Full Job Description *</label>
+                    <textarea id="jobDescription" rows="12" placeholder="Paste the complete job description here including responsibilities, requirements, qualifications, and any other details..."></textarea>
+                </div>
+                <div class="file-upload-area" id="jobDescUpload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Or drag & drop a file here</p>
+                    <span>Supports: PDF, DOC, DOCX, TXT</span>
+                    <input type="file" id="jobDescFile" accept=".pdf,.doc,.docx,.txt" hidden>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="nextStep(2)">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Step 2: Current Resume -->
+            <section class="step-section" id="step2">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-tie"></i> Your Current Resume</h2>
+                    <p>Provide your existing resume content</p>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('paste')">Paste Text</button>
+                    <button class="tab-btn" onclick="switchTab('upload')">Upload File</button>
+                    <button class="tab-btn" onclick="switchTab('manual')">Enter Manually</button>
+                </div>
+
+                <!-- Paste Tab -->
+                <div class="tab-content active" id="pasteTab">
+                    <div class="input-group">
+                        <label for="resumeText">Paste Your Resume</label>
+                        <textarea id="resumeText" rows="15" placeholder="Paste your entire resume content here..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Upload Tab -->
+                <div class="tab-content" id="uploadTab">
+                    <div class="file-upload-area large" id="resumeUpload">
+                        <i class="fas fa-file-upload"></i>
+                        <h3>Upload Your Resume</h3>
+                        <p>Drag & drop your file here or click to browse</p>
+                        <span>Supports: <strong>DOCX (Word)</strong>, PDF, DOC, TXT</span>
+                        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt" hidden>
+                    </div>
+                    <div id="uploadedResumeInfo" class="uploaded-file-info" style="display: none;">
+                        <i class="fas fa-file-check"></i>
+                        <span id="resumeFileName"></span>
+                        <span id="resumeFileFormat" class="file-format-badge"></span>
+                        <button onclick="removeResumeFile()" class="remove-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="upload-note">
+                        <i class="fas fa-info-circle"></i>
+                        <p><strong>Word Documents (.docx):</strong> Your updated resume will be downloaded in the same Word format, preserving your ability to edit it further.</p>
+                    </div>
+                </div>
+
+                <!-- Photo Upload Section (visible in all tabs) -->
+                <div class="photo-upload-section">
+                    <h4><i class="fas fa-camera"></i> Profile Photo (Optional)</h4>
+                    <div class="photo-upload-container">
+                        <div class="photo-preview" id="photoPreview">
+                            <i class="fas fa-user-circle"></i>
+                            <span>No photo</span>
+                        </div>
+                        <div class="photo-upload-controls">
+                            <label for="photoFile" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-upload"></i> Upload Photo
+                            </label>
+                            <input type="file" id="photoFile" accept="image/*" hidden onchange="handlePhotoUpload(event)">
+                            <button class="btn btn-outline btn-sm" onclick="removePhoto()" id="removePhotoBtn" style="display: none;">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                            <p class="photo-hint">Recommended: Square photo, 300x300px or larger</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manual Entry Tab -->
+                <div class="tab-content" id="manualTab">
+                    <div class="manual-entry-form">
+                        <!-- Personal Info -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-user"></i> Personal Information</h3>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Full Name *</label>
+                                    <input type="text" id="fullName" placeholder="John Doe">
+                                </div>
+                                <div class="input-group">
+                                    <label>Email *</label>
+                                    <input type="email" id="email" placeholder="john@example.com">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Phone</label>
+                                    <input type="tel" id="phone" placeholder="+1 (555) 123-4567">
+                                </div>
+                                <div class="input-group">
+                                    <label>Location</label>
+                                    <input type="text" id="location" placeholder="City, State">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>LinkedIn</label>
+                                    <input type="url" id="linkedin" placeholder="linkedin.com/in/johndoe">
+                                </div>
+                                <div class="input-group">
+                                    <label>Portfolio/Website</label>
+                                    <input type="url" id="portfolio" placeholder="www.johndoe.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Professional Summary -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-align-left"></i> Professional Summary</h3>
+                            <div class="input-group">
+                                <textarea id="summary" rows="4" placeholder="Brief overview of your professional background and career goals..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Work Experience -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+                            <div id="experienceContainer">
+                                <div class="experience-entry">
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <label>Job Title *</label>
+                                            <input type="text" class="expTitle" placeholder="Software Engineer">
+                                        </div>
+                                        <div class="input-group">
+                                            <label>Company *</label>
+                                            <input type="text" class="expCompany" placeholder="Tech Company Inc.">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <label>Start Date</label>
+                                            <input type="month" class="expStart">
+                                        </div>
+                                        <div class="input-group">
+                                            <label>End Date</label>
+                                            <input type="month" class="expEnd">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" class="expCurrent"> Currently working here
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Description & Achievements</label>
+                                        <textarea class="expDescription" rows="4" placeholder="• Led team of 5 developers...&#10;• Increased efficiency by 30%...&#10;• Implemented new features..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addExperience()">
+                                <i class="fas fa-plus"></i> Add Another Position
+                            </button>
+                        </div>
+
+                        <!-- Education -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                            <div id="educationContainer">
+                                <div class="education-entry">
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <label>Degree</label>
+                                            <input type="text" class="eduDegree" placeholder="Bachelor of Science in Computer Science">
+                                        </div>
+                                        <div class="input-group">
+                                            <label>Institution</label>
+                                            <input type="text" class="eduInstitution" placeholder="University Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <label>Graduation Year</label>
+                                            <input type="number" class="eduYear" placeholder="2020" min="1950" max="2030">
+                                        </div>
+                                        <div class="input-group">
+                                            <label>GPA (Optional)</label>
+                                            <input type="text" class="eduGPA" placeholder="3.8/4.0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addEducation()">
+                                <i class="fas fa-plus"></i> Add Another Education
+                            </button>
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-cogs"></i> Skills</h3>
+                            <div class="input-group">
+                                <label>Technical Skills</label>
+                                <input type="text" id="technicalSkills" placeholder="JavaScript, Python, React, AWS, SQL...">
+                            </div>
+                            <div class="input-group">
+                                <label>Soft Skills</label>
+                                <input type="text" id="softSkills" placeholder="Leadership, Communication, Problem-solving...">
+                            </div>
+                        </div>
+
+                        <!-- Certifications -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-certificate"></i> Certifications (Optional)</h3>
+                            <div class="input-group">
+                                <textarea id="certifications" rows="3" placeholder="• AWS Certified Solutions Architect&#10;• PMP Certification&#10;• Google Analytics Certified"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Projects -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-project-diagram"></i> Projects (Optional)</h3>
+                            <div class="input-group">
+                                <textarea id="projects" rows="4" placeholder="Project Name - Description and key achievements..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-outline" onclick="prevStep(1)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep(3)">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Step 3: Supporting Documents -->
+            <section class="step-section" id="step3">
+                <div class="section-header">
+                    <h2><i class="fas fa-folder-open"></i> Supporting Documents</h2>
+                    <p>Add any additional materials to strengthen your resume (optional)</p>
+                </div>
+
+                <div class="supporting-docs-grid">
+                    <div class="doc-card">
+                        <div class="doc-icon"><i class="fab fa-linkedin"></i></div>
+                        <h4>LinkedIn Profile</h4>
+                        <textarea id="linkedinContent" rows="4" placeholder="Paste your LinkedIn summary or profile content..."></textarea>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-icon"><i class="fas fa-envelope"></i></div>
+                        <h4>Cover Letter</h4>
+                        <textarea id="coverLetter" rows="4" placeholder="Paste any existing cover letter content..."></textarea>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-icon"><i class="fas fa-award"></i></div>
+                        <h4>Achievements & Awards</h4>
+                        <textarea id="achievements" rows="4" placeholder="List any notable achievements, awards, or recognitions..."></textarea>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-icon"><i class="fas fa-file-alt"></i></div>
+                        <h4>Other Documents</h4>
+                        <textarea id="otherDocs" rows="4" placeholder="Any other relevant information..."></textarea>
+                    </div>
+                </div>
+
+                <div class="file-upload-area" id="supportingDocsUpload">
+                    <i class="fas fa-paperclip"></i>
+                    <p>Upload additional files</p>
+                    <span>Supports: PDF, DOC, DOCX, TXT (Multiple files allowed)</span>
+                    <input type="file" id="supportingFiles" accept=".pdf,.doc,.docx,.txt" multiple hidden>
+                </div>
+                <div id="supportingFilesList" class="files-list"></div>
+
+                <div class="button-group">
+                    <button class="btn btn-outline" onclick="prevStep(2)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep(4)">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Step 4: Generate Resume -->
+            <section class="step-section" id="step4">
+                <div class="section-header">
+                    <h2><i class="fas fa-magic"></i> Generate Tailored Resume</h2>
+                    <p>Review your inputs and generate your optimized resume</p>
+                </div>
+
+                <div class="review-panel">
+                    <h3>Summary of Your Inputs</h3>
+                    <div class="review-grid">
+                        <div class="review-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <strong>Target Position</strong>
+                                <span id="reviewJobTitle">-</span>
+                            </div>
+                        </div>
+                        <div class="review-item">
+                            <i class="fas fa-building"></i>
+                            <div>
+                                <strong>Company</strong>
+                                <span id="reviewCompany">-</span>
+                            </div>
+                        </div>
+                        <div class="review-item">
+                            <i class="fas fa-file-alt"></i>
+                            <div>
+                                <strong>Job Description</strong>
+                                <span id="reviewJobDesc">-</span>
+                            </div>
+                        </div>
+                        <div class="review-item">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <strong>Resume Content</strong>
+                                <span id="reviewResume">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="options-panel">
+                    <h3>Resume Options</h3>
+                    <div class="options-grid">
+                        <div class="option-item">
+                            <label>Resume Template</label>
+                            <select id="templateSelect">
+                                <option value="modern">Modern Professional</option>
+                                <option value="classic">Classic Traditional</option>
+                                <option value="creative">Creative Design</option>
+                                <option value="minimal">Minimalist Clean</option>
+                            </select>
+                        </div>
+                        <div class="option-item">
+                            <label>Tone</label>
+                            <select id="toneSelect">
+                                <option value="professional">Professional</option>
+                                <option value="confident">Confident & Bold</option>
+                                <option value="friendly">Friendly & Approachable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkbox-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="useAI" checked> <i class="fas fa-robot"></i> Use AI to optimize resume content
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="optimizeATS" checked> Optimize for ATS (Applicant Tracking Systems)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeKeywords" checked> Include relevant keywords from job description
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="quantifyAchievements" checked> Emphasize quantifiable achievements
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rewriteBullets" checked> Rewrite bullet points for impact
+                        </label>
+                    </div>
+                    <div class="ai-notice" id="aiNotice">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="aiNoticeText">Configure your OpenAI API key above to enable AI features</span>
+                    </div>
+                </div>
+
+                <div class="button-group center">
+                    <button class="btn btn-outline" onclick="prevStep(3)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary btn-large" onclick="generateResume()">
+                        <i class="fas fa-wand-magic-sparkles"></i> Generate Tailored Resume
+                    </button>
+                </div>
+            </section>
+
+            <!-- Result Section -->
+            <section class="step-section" id="resultSection" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-check-circle"></i> Your Tailored Resume</h2>
+                    <p>Review, edit, and download your optimized resume</p>
+                </div>
+
+                <div class="result-container">
+                    <div class="result-toolbar">
+                        <div class="toolbar-left">
+                            <button class="toolbar-btn" onclick="editResume()">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="toolbar-btn" onclick="regenerateResume()">
+                                <i class="fas fa-redo"></i> Regenerate
+                            </button>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="toolbar-btn" onclick="copyToClipboard()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="toolbar-btn primary" id="downloadWordBtn" onclick="downloadResume('docx')" style="display: none;">
+                                <i class="fas fa-file-word"></i> Download Word (.docx)
+                            </button>
+                            <button class="toolbar-btn primary" id="downloadPdfBtn" onclick="downloadResume('pdf')">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                            <button class="toolbar-btn" onclick="downloadResume('txt')">
+                                <i class="fas fa-file-alt"></i> Text
+                            </button>
+                            <button class="toolbar-btn" onclick="toggleCoverLetter()">
+                                <i class="fas fa-envelope"></i> Cover Letter
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="resume-preview" id="resumePreview">
+                        <!-- Generated resume will appear here -->
+                    </div>
+
+                    <!-- Cover Letter Section -->
+                    <div class="cover-letter-section" id="coverLetterSection" style="display: none;">
+                        <div class="cover-letter-header">
+                            <h3><i class="fas fa-envelope"></i> Cover Letter</h3>
+                            <button class="close-cover-letter" onclick="closeCoverLetter()"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="cover-letter-toolbar">
+                            <button class="toolbar-btn" onclick="editCoverLetter()">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="toolbar-btn" onclick="copyCoverLetterToClipboard()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="toolbar-btn primary" onclick="downloadCoverLetter('docx')">
+                                <i class="fas fa-file-word"></i> Download Word
+                            </button>
+                            <button class="toolbar-btn primary" onclick="downloadCoverLetter('pdf')">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                        </div>
+                        <div class="cover-letter-preview" id="coverLetterPreview">
+                            <!-- Generated cover letter will appear here -->
+                        </div>
+                    </div>
+
+                    <div class="keyword-analysis">
+                        <h4><i class="fas fa-key"></i> Job Requirement Match Analysis</h4>
+                        <p class="analysis-subtitle">Keywords and skills from job description found in your tailored resume</p>
+                        <div class="keyword-stats">
+                            <div class="stat">
+                                <span class="stat-number" id="matchedKeywords">0/0</span>
+                                <span class="stat-label">Keywords Matched</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="matchPercentage">0%</span>
+                                <span class="stat-label">Match Score</span>
+                            </div>
+                        </div>
+                        <div class="keyword-legend">
+                            <span class="legend-item"><span class="keyword-tag matched"><i class="fas fa-check"></i></span> Included in Resume</span>
+                            <span class="legend-item"><span class="keyword-tag missing"><i class="fas fa-times"></i></span> Consider Adding</span>
+                        </div>
+                        <div class="keywords-list" id="keywordsList"></div>
+                    </div>
+                </div>
+
+                <div class="button-group center">
+                    <button class="btn btn-outline" onclick="startOver()">
+                        <i class="fas fa-redo"></i> Start Over
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <h3 id="loadingTitle">Generating Your Resume...</h3>
+                <p id="loadingText">Analyzing job requirements...</p>
+                <div class="ai-progress" id="aiProgress" style="display: none;">
+                    <div class="ai-progress-bar">
+                        <div class="ai-progress-fill" id="aiProgressFill"></div>
+                    </div>
+                    <div class="ai-progress-steps" id="aiProgressSteps"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-brand">
+                <span class="footer-mc">Mc'Harv</span> <span class="footer-tech">Techlabs</span>
+            </div>
+            <p>Smart Resume Builder &copy; 2025 | Built with <i class="fas fa-heart"></i> by Mc'Harv Techlabs</p>
+            <div class="footer-links">
+                <a href="https://mcharvtechlabs.com" target="_blank"><i class="fas fa-globe"></i> Website</a>
+                <a href="https://www.linkedin.com/company/mcharv-techlabs-private-limited/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="mailto:info@mcharvtechlabs.com"><i class="fas fa-envelope"></i> Contact</a>
+            </div>
+            <p class="footer-tagline">Enhancing Your Technology Experience Together</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

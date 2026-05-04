@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Invoice Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-brand">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h1>Invoice Generator</h1>
+                    <span class="badge">Professional Edition</span>
+                </div>
+                <div class="header-actions">
+                    <a href="../index.html" class="back-link" title="Back to Dashboard">
+                        <i class="fas fa-arrow-left"></i> Dashboard
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="app-body">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <nav class="nav-tabs">
+                    <button class="nav-tab active" data-tab="company" onclick="switchTab('company')">
+                        <i class="fas fa-building"></i>
+                        <span>Company</span>
+                    </button>
+                    <button class="nav-tab" data-tab="customer" onclick="switchTab('customer')">
+                        <i class="fas fa-user"></i>
+                        <span>Customer</span>
+                    </button>
+                    <button class="nav-tab" data-tab="invoice" onclick="switchTab('invoice')">
+                        <i class="fas fa-receipt"></i>
+                        <span>Invoice</span>
+                    </button>
+                    <button class="nav-tab" data-tab="items" onclick="switchTab('items')">
+                        <i class="fas fa-list"></i>
+                        <span>Line Items</span>
+                    </button>
+                    <button class="nav-tab" data-tab="bank" onclick="switchTab('bank')">
+                        <i class="fas fa-landmark"></i>
+                        <span>Bank</span>
+                    </button>
+                    <button class="nav-tab" data-tab="footer" onclick="switchTab('footer')">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Footer</span>
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Company Details Tab -->
+                <div class="content-tab active" id="tab-company">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-building"></i> Company Details</h2>
+                        <p>Your company information</p>
+                    </div>
+                    <form class="form-grid">
+                        <div class="form-group">
+                            <label>Company Name *</label>
+                            <input type="text" id="companyName" placeholder="MCHARV TECHLABS PRIVATE LIMITED" value="MCHARV TECHLABS PRIVATE LIMITED" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="companyEmail" placeholder="info@mcharvtechlabs.com" value="info@mcharvtechlabs.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="companyPhone" placeholder="+44 7775000667" value="+44 7775000667" required>
+                        </div>
+                        <div class="form-group">
+                            <label>GST Number</label>
+                            <input type="text" id="companyGST" placeholder="33AARCM3890L1Z" value="33AARCM3890L1Z">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Address *</label>
+                            <textarea id="companyAddress" placeholder="# 53, Near Sharada School, Jayanna Layout, Attibele, Anekal, Bangalore - 562107" required># 53, Near Sharada School, Jayanna Layout, Attibele, Anekal, Bangalore - 562107</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>PAN</label>
+                            <input type="text" id="companyPAN" placeholder="AARCM3890L" value="AARCM3890L">
+                        </div>
+                        <div class="form-group">
+                            <label>CIN</label>
+                            <input type="text" id="companyCIN" placeholder="U82099KA2023PTC73813" value="U82099KA2023PTC73813">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="url" id="website" placeholder="https://mcharvtechlabs.com/" value="https://mcharvtechlabs.com/">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Customer Details Tab -->
+                <div class="content-tab" id="tab-customer">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-user"></i> Customer Details</h2>
+                        <p>Bill to information</p>
+                    </div>
+                    <form class="form-grid">
+                        <div class="form-group">
+                            <label>Customer Name *</label>
+                            <input type="text" id="billToName" placeholder="M/s A3X LIMITED" value="M/s A3X LIMITED" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="billToEmail" placeholder="contact@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Number</label>
+                            <input type="text" id="billToCompanyNum" placeholder="16409419" value="16409419">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Address *</label>
+                            <textarea id="billToAddress" placeholder="62 Bartholomew Street, Newbury, Berkshire, England, RG14 7BE." required>62 Bartholomew Street, Newbury, Berkshire, England, RG14 7BE.</textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Invoice Details Tab -->
+                <div class="content-tab" id="tab-invoice">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-receipt"></i> Invoice Details</h2>
+                        <p>Invoice information and settings</p>
+                    </div>
+                    <form class="form-grid">
+                        <div class="form-group">
+                            <label>Invoice Number *</label>
+                            <input type="text" id="invoiceNumber" placeholder="INV-2026-27-A3X-02" value="INV-2026-27-A3X-02" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Invoice Date *</label>
+                            <input type="date" id="invoiceDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Currency *</label>
+                            <select id="currency" onchange="updateInvoice()">
+                                <option value="USD" selected>USD ($)</option>
+                                <option value="INR">INR (₹)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Service Period</label>
+                            <input type="text" id="servicePeriod" placeholder="Services for February 2026" value="Services for February 2026">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Line Items Tab -->
+                <div class="content-tab" id="tab-items">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-list"></i> Line Items</h2>
+                        <p>Add services and products</p>
+                    </div>
+                    <div class="items-container">
+                        <div class="table-responsive">
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">No.</th>
+                                        <th>Description</th>
+                                        <th style="width: 100px;">Quantity</th>
+                                        <th style="width: 120px;">Rate</th>
+                                        <th style="width: 120px;">Amount</th>
+                                        <th style="width: 60px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="btn-add-item" onclick="addItem()">
+                            <i class="fas fa-plus"></i> Add Item
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bank Details Tab -->
+                <div class="content-tab" id="tab-bank">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-landmark"></i> Bank Details</h2>
+                        <p>Payment information</p>
+                    </div>
+                    <form class="form-grid">
+                        <div class="form-group">
+                            <label>Account Name</label>
+                            <input type="text" id="accountName" placeholder="MCHARV TECHLABS PRIVATE LIMITED" value="MCHARV TECHLABS PRIVATE LIMITED">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Number</label>
+                            <input type="text" id="accountNumber" placeholder="43886/50006646" value="43886/50006646">
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Name</label>
+                            <input type="text" id="bankName" placeholder="ICICI Bank" value="ICICI Bank">
+                        </div>
+                        <div class="form-group">
+                            <label>Branch</label>
+                            <input type="text" id="bankBranch" placeholder="Attibele" value="Attibele">
+                        </div>
+                        <div class="form-group">
+                            <label>IFSC Code</label>
+                            <input type="text" id="ifscCode" placeholder="ICIC0004388" value="ICIC0004388">
+                        </div>
+                        <div class="form-group">
+                            <label>SWIFT Code</label>
+                            <input type="text" id="swiftCode" placeholder="ICICNRB002" value="ICICNRB002">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer & Notes Tab -->
+                <div class="content-tab" id="tab-footer">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-file-alt"></i> Footer & Notes</h2>
+                        <p>Additional information and terms</p>
+                    </div>
+                    <form class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Thank You Message</label>
+                            <textarea id="thankYouMsg" placeholder="We appreciate your business. Thank you!" rows="3">We appreciate your business. Thank you!</textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Terms & Conditions</label>
+                            <textarea id="termsConditions" placeholder="Payment terms, due dates, etc." rows="3"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Notes</label>
+                            <textarea id="notes" placeholder="Additional notes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Preview Area -->
+                <div class="preview-container">
+                    <div id="invoicePreview" class="invoice-preview">
+                        <!-- Invoice will be generated here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Action Bar - Fixed at Bottom -->
+        <footer class="action-bar">
+            <div class="action-bar-content">
+                <button class="action-btn primary" onclick="updateInvoice()" title="Update preview">
+                    <i class="fas fa-refresh"></i>
+                    <span>Update Preview</span>
+                </button>
+                <button class="action-btn" onclick="printInvoice()" title="Print invoice">
+                    <i class="fas fa-print"></i>
+                    <span>Print</span>
+                </button>
+                <button class="action-btn" onclick="downloadPDF()" title="Download as PDF">
+                    <i class="fas fa-download"></i>
+                    <span>Download PDF</span>
+                </button>
+                <button class="action-btn" onclick="openEmailModal()" title="Send via email">
+                    <i class="fas fa-envelope"></i>
+                    <span>Send Email</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Send Invoice via Email</h2>
+                <button class="modal-close" onclick="closeEmailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>To - Recipient Email(s) *</label>
+                    <input type="text" id="emailTo" placeholder="email1@example.com, email2@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>CC - (Optional)</label>
+                    <input type="text" id="emailCC" placeholder="cc@example.com">
+                </div>
+                <div class="form-group">
+                    <label>BCC - (Optional)</label>
+                    <input type="text" id="emailBCC" placeholder="bcc@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Recipient Name - (Optional)</label>
+                    <input type="text" id="recipientName" placeholder="John Doe">
+                </div>
+                <div id="emailStatus" class="email-status"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="act-btn primary" onclick="sendInvoiceEmail()">
+                    <i class="fas fa-send"></i> Send Invoice
+                </button>
+                <button class="act-btn secondary" onclick="closeEmailModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

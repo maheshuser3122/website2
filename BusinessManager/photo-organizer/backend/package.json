@@ -1,0 +1,32 @@
+{
+  "name": "photo-organizer-backend",
+  "version": "1.0.0",
+  "description": "Backend for Photo Organizer Tool",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "openai": "^4.26.0",
+    "axios": "^1.6.0",
+    "chalk": "^5.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "exif-parser": "^0.1.12",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.1",
+    "fs-extra": "^11.3.3",
+    "node-geocoder": "^4.2.0",
+    "sharp": "^0.32.6"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

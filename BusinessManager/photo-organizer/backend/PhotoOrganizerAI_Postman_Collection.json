@@ -1,0 +1,472 @@
+{
+  "info": {
+    "name": "Photo Organizer - AI Vision API",
+    "description": "Complete API collection for AI-powered photo analysis",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "photo-organizer-ai-2024"
+  },
+  "item": [
+    {
+      "name": "Status & Health",
+      "item": [
+        {
+          "name": "Check AI Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/ai/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "status"]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vision Analysis",
+      "item": [
+        {
+          "name": "Full Image Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/analyze",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "analyze"]
+            }
+          }
+        },
+        {
+          "name": "Detect Labels",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/detect-labels",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "detect-labels"]
+            }
+          }
+        },
+        {
+          "name": "Detect Faces",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/detect-faces",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "detect-faces"]
+            }
+          }
+        },
+        {
+          "name": "Detect Text (OCR)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/detect-text",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "detect-text"]
+            }
+          }
+        },
+        {
+          "name": "Detect Objects",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/detect-objects",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "detect-objects"]
+            }
+          }
+        },
+        {
+          "name": "Assess Quality",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/assess-quality",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "assess-quality"]
+            }
+          }
+        },
+        {
+          "name": "Categorize Photo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/categorize",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "categorize"]
+            }
+          }
+        },
+        {
+          "name": "Generate Smart Filename",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/generate-filename",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "generate-filename"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bad Photo Detection",
+      "item": [
+        {
+          "name": "Analyze Single Photo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/bad-photos/analyze",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "bad-photos", "analyze"]
+            }
+          }
+        },
+        {
+          "name": "Batch Analyze Photos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePaths\": [\n    \"/path/to/photo1.jpg\",\n    \"/path/to/photo2.jpg\",\n    \"/path/to/photo3.jpg\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/bad-photos/batch-analyze",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "bad-photos", "batch-analyze"]
+            }
+          }
+        },
+        {
+          "name": "Get Recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/bad-photos/recommendations",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "bad-photos", "recommendations"]
+            }
+          }
+        },
+        {
+          "name": "Filter Bad Photos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePaths\": [\n    \"/path/to/photo1.jpg\",\n    \"/path/to/photo2.jpg\",\n    \"/path/to/photo3.jpg\"\n  ],\n  \"severityThreshold\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/bad-photos/filter",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "bad-photos", "filter"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quality Detection",
+      "item": [
+        {
+          "name": "Analyze Quality",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/quality/analyze",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "quality", "analyze"]
+            }
+          }
+        },
+        {
+          "name": "Compare Photos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePaths\": [\n    \"/path/to/photo1.jpg\",\n    \"/path/to/photo2.jpg\",\n    \"/path/to/photo3.jpg\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/quality/compare",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "quality", "compare"]
+            }
+          }
+        },
+        {
+          "name": "Batch Analyze Quality",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePaths\": [\n    \"/path/to/photo1.jpg\",\n    \"/path/to/photo2.jpg\",\n    \"/path/to/photo3.jpg\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/quality/batch-analyze",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "quality", "batch-analyze"]
+            }
+          }
+        },
+        {
+          "name": "Enhancement Suggestions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePath\": \"/path/to/your/photo.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/quality/enhancement-suggestions",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "quality", "enhancement-suggestions"]
+            }
+          }
+        },
+        {
+          "name": "Select Best Photos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePaths\": [\n    \"/path/to/burst1.jpg\",\n    \"/path/to/burst2.jpg\",\n    \"/path/to/burst3.jpg\",\n    \"/path/to/burst4.jpg\",\n    \"/path/to/burst5.jpg\"\n  ],\n  \"keepCount\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/quality/select-best",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "quality", "select-best"]
+            }
+          }
+        },
+        {
+          "name": "Trend Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imagePaths\": [\n    \"/path/to/photo1.jpg\",\n    \"/path/to/photo2.jpg\",\n    \"/path/to/photo3.jpg\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ai/quality/trend-analysis",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ai", "quality", "trend-analysis"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

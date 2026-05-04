@@ -1,0 +1,18 @@
+{
+  "signatures": [
+    {
+      "id": "harshitha-bp",
+      "name": "Harshitha B.P - Director",
+      "title": "Director",
+      "uploadDate": "2026-03-26",
+      "status": "active",
+      "description": "Official signature of Director Harshitha B.P"
+    }
+  ],
+  "extractionGuide": {
+    "instructions": "Signatures can be uploaded through the app or extracted from images",
+    "supportedFormats": ["JPG", "PNG", "GIF"],
+    "maxSize": "5MB",
+    "recommendedResolution": "300x100px minimum"
+  }
+}
