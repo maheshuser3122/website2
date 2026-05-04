@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FiUploadCloud, FiCheck, FiAlert } from 'react-icons/fi'
+import { FiUploadCloud, FiCheck, FiAlertTriangle } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import { useExcelUpload } from '@hooks/useExcelUpload'
 
@@ -84,7 +84,7 @@ function FileUpload({
           </>
         ) : error ? (
           <>
-            <FiAlert className="w-12 h-12 text-red-500" />
+            <FiAlertTriangle className="w-12 h-12 text-red-500" />
             <div>
               <p className="font-medium text-red-900">Upload failed</p>
               <p className="text-sm text-red-700">{error}</p>
