@@ -215,6 +215,70 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
   border-radius:4px;background:var(--navy3);
 }
 
+/* App Overlay Modal */
+.app-modal{
+  display:none !important;position:fixed;top:75px;left:0;right:0;bottom:0;z-index:1500;
+  background:linear-gradient(135deg,var(--navy),var(--navy2)) !important;
+  flex-direction:column;
+  height:calc(100vh - 75px);
+  width:100%;
+}
+
+.app-modal.open{display:flex !important;}
+
+.app-modal-header{
+  background:linear-gradient(135deg,var(--gold),var(--gold2)) !important;
+  color:var(--navy) !important;
+  padding:1.25rem 2.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1.5px solid rgba(0,0,0,.2);
+  flex-shrink:0;
+  height:auto;
+  min-height:60px;
+}
+
+.app-modal-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;
+  font-weight:900;text-transform:uppercase;letter-spacing:2px;
+}
+
+.app-modal-close{
+  background:rgba(0,0,0,.2);border:none;color:inherit;
+  padding:.6rem 1.2rem;cursor:pointer;font-weight:700;
+  text-transform:uppercase;font-size:.85rem;border-radius:4px;
+  transition:all .2s;
+}
+
+.app-modal-close:hover{background:rgba(0,0,0,.4);}
+
+.app-modal-content{
+  flex:1;overflow-y:auto;overflow-x:hidden;position:relative;
+  background:var(--navy3);
+  display:flex;flex-direction:column;
+}
+
+.app-modal-content > div{
+  width:100%;height:100%;overflow:auto;
+}
+
+.app-modal iframe{
+  width:100%;height:100%;border:none;background:var(--navy3);
+}
+
+.app-loading{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.3);z-index:10;
+}
+
+.app-loading-spinner{
+  width:50px;height:50px;border:3px solid rgba(212,160,50,.3);
+  border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;
+}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+
 /* Modal */
 .modal{
   display:none;position:fixed;inset:0;z-index:2000;
@@ -292,7 +356,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
         <div class="logo-text">Admin Dashboard</div>
       </div>
       <nav class="header-nav">
-        <a href="main.html" target="_blank">← Back to Website</a>
+        <a href="/" target="_self">← Back to Website</a>
       </nav>
     </div>
     <div class="header-right">
@@ -354,6 +418,10 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
         <span class="sidebar-icon">💼</span>
         <span>Opportunities</span>
       </a>
+      <a class="sidebar-link" onclick="showSection('team')">
+        <span class="sidebar-icon">👥</span>
+        <span>Team Members</span>
+      </a>
       <a class="sidebar-link" onclick="showSection('settings')">
         <span class="sidebar-icon">⚙️</span>
         <span>Settings</span>
@@ -399,7 +467,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           </div>
           <div class="app-body">
             <p class="app-desc">Create, manage, and generate professional invoices with custom templates and multiple output formats.</p>
-            <div class="app-action" onclick="openApp('invoice')">
+            <div class="app-action" onclick="showSection('invoice')">
               <div class="app-action-text">Launch Application →</div>
             </div>
           </div>
@@ -419,7 +487,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           </div>
           <div class="app-body">
             <p class="app-desc">Generate comprehensive business reports with charts, data analysis, and professional formatting for presentations.</p>
-            <div class="app-action" onclick="openApp('report')">
+            <div class="app-action" onclick="showSection('report')">
               <div class="app-action-text">Launch Application →</div>
             </div>
           </div>
@@ -439,7 +507,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           </div>
           <div class="app-body">
             <p class="app-desc">Build professional resumes and CVs with ATS optimization, multiple templates, and instant downloads in various formats.</p>
-            <div class="app-action" onclick="openApp('resume')">
+            <div class="app-action" onclick="showSection('resume')">
               <div class="app-action-text">Launch Application →</div>
             </div>
           </div>
@@ -458,7 +526,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           </div>
           <div class="app-body">
             <p class="app-desc">Manage TDS (Tax Deducted at Source) calculations, compliance tracking, and financial records for FY 2025-26.</p>
-            <div class="app-action" onclick="openApp('tds')">
+            <div class="app-action" onclick="showSection('tds')">
               <div class="app-action-text">Launch Application →</div>
             </div>
           </div>
@@ -474,7 +542,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           <div class="iframe-title">Invoice Generator Application</div>
           <button class="close-iframe" onclick="closeApp()">Close</button>
         </div>
-        <iframe class="app-iframe" src="./InvoiceGenerator/index.html"></iframe>
+        <iframe class="app-iframe" src="/apps/invoice-generator/"></iframe>
       </div>
     </section>
 
@@ -486,7 +554,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           <div class="iframe-title">Report Generator Application</div>
           <button class="close-iframe" onclick="closeApp()">Close</button>
         </div>
-        <iframe class="app-iframe" src="./ReportGenerator/index.html"></iframe>
+        <iframe class="app-iframe" src="/apps/report-generator/"></iframe>
       </div>
     </section>
 
@@ -498,7 +566,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           <div class="iframe-title">Resume Builder Application</div>
           <button class="close-iframe" onclick="closeApp()">Close</button>
         </div>
-        <iframe class="app-iframe" src="./Resume Builder App/index.html"></iframe>
+        <iframe class="app-iframe" src="/apps/resume-builder/"></iframe>
       </div>
     </section>
 
@@ -510,7 +578,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
           <div class="iframe-title">TDS Manager Application</div>
           <button class="close-iframe" onclick="closeApp()">Close</button>
         </div>
-        <iframe class="app-iframe" src="./TDS_Manager.html"></iframe>
+        <iframe class="app-iframe" src="/apps/tds-manager/"></iframe>
       </div>
     </section>
 
@@ -613,6 +681,51 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
       </div>
     </section>
 
+    <!-- Team Section -->
+    <section id="team-section" class="section">
+      <div class="page-title">Team Management</div>
+      <div style="max-width:800px;">
+        <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:2rem;margin-bottom:2rem;">
+          <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem;">👤 Add Team Member</h3>
+          <form onsubmit="addTeamMember(event)" style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Name *</label>
+                <input type="text" id="tm-name" placeholder="John Doe" maxlength="100" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;" required/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Role *</label>
+                <input type="text" id="tm-role" placeholder="Senior Developer" maxlength="50" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;" required/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Location</label>
+                <input type="text" id="tm-loc" placeholder="London, UK" maxlength="50" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Department</label>
+                <input type="text" id="tm-dept" placeholder="Engineering" maxlength="50" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Bio</label>
+              <textarea id="tm-bio" placeholder="Brief professional bio..." maxlength="300" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;min-height:80px;"></textarea>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;">Photo (JPG/PNG, max 5MB)</label>
+              <input type="file" id="tm-photo" accept=".jpg,.jpeg,.png" onchange="previewTeamPhoto(this)" style="background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--muted);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+              <div id="tm-photo-prev" style="display:none;margin-top:1rem;">
+                <img id="tm-photo-img" style="max-width:100px;height:120px;object-fit:cover;border:1.5px solid var(--gold);border-radius:4px;"/>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Team Member</button>
+          </form>
+        </div>
+        <div id="team-content"></div>
+      </div>
+    </section>
+
     <!-- Settings Section -->
     <section id="settings-section" class="section">
       <div class="page-title">Site Settings</div>
@@ -648,7 +761,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
   </main>
 </div>
 
-<!-- Modal for Login -->
+<!-- Login Modal -->
 <div id="loginModal" class="modal open">
   <div class="modal-content">
     <div class="modal-title">Admin Login</div>
@@ -662,6 +775,23 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
       </div>
     </form>
     <div id="loginError" style="color:#ff6b6b;font-size:.85rem;margin-top:1rem;text-align:center;display:none;">Invalid password</div>
+  </div>
+</div>
+
+<!-- App Modal Overlay -->
+<div id="appModal" class="app-modal">
+  <div class="app-modal-header">
+    <div class="app-modal-title" id="appModalTitle">Loading...</div>
+    <div style="display:flex;gap:.75rem;">
+      <button class="app-modal-close" onclick="closeAppModal()" style="background:rgba(0,0,0,.15);">← Back to Admin</button>
+      <button class="app-modal-close" onclick="closeAppModal()">✕ Close</button>
+    </div>
+  </div>
+  <div class="app-modal-content">
+    <div class="app-loading" id="appLoading">
+      <div class="app-loading-spinner"></div>
+    </div>
+    <div id="appContent" style="width:100%;height:100%;overflow:auto;"></div>
   </div>
 </div>
 
@@ -727,21 +857,115 @@ window.addEventListener('load', () => {
 
 // Section Management
 function showSection(sectionName) {
+  // If it's an app section, open modal instead
+  const appSections = ['invoice', 'report', 'resume', 'tds'];
+  if (appSections.includes(sectionName)) {
+    openAppModal(sectionName);
+    return;
+  }
+  
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(sectionName + '-section').classList.add('active');
   
   document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
-  event.target.closest('.sidebar-link').classList.add('active');
+  if (event && event.target) {
+    event.target.closest('.sidebar-link')?.classList.add('active');
+  }
   
   document.querySelector('main').scrollTop = 0;
 }
 
-function openApp(appName) {
-  showSection(appName);
+// App Modal Functions
+function openAppModal(appName) {
+  const appConfig = {
+    'invoice': {
+      title: '📄 Invoice Generator',
+      url: '/apps/invoice-generator/'
+    },
+    'report': {
+      title: '📈 Report Generator',
+      url: '/apps/report-generator/'
+    },
+    'resume': {
+      title: '👤 Resume Builder',
+      url: '/apps/resume-builder/'
+    },
+    'tds': {
+      title: '💰 TDS Manager',
+      url: '/apps/tds-manager/'
+    }
+  };
+  
+  if (!appConfig[appName]) return;
+  
+  const config = appConfig[appName];
+  document.getElementById('appModalTitle').textContent = config.title;
+  document.getElementById('appModal').classList.add('open');
+  document.getElementById('appLoading').style.display = 'flex';
+  document.getElementById('appContent').innerHTML = '';
+  
+  // Fetch the app HTML
+  fetch(config.url)
+    .then(response => response.text())
+    .then(html => {
+      // Create a container for the app content
+      const container = document.createElement('div');
+      container.style.width = '100%';
+      container.style.height = '100%';
+      container.style.position = 'relative';
+      
+      // Parse and display the HTML
+      container.innerHTML = html;
+      
+      // Replace all relative URLs in scripts and links
+      const baseUrl = config.url.replace(/\/$/, '');
+      
+      // Update script sources
+      container.querySelectorAll('script[src]').forEach(script => {
+        if (!script.src.startsWith('http') && !script.src.startsWith('/')) {
+          script.src = baseUrl + '/' + script.src;
+        }
+      });
+      
+      // Update link hrefs
+      container.querySelectorAll('link[href]').forEach(link => {
+        if (!link.href.startsWith('http') && !link.href.startsWith('/')) {
+          link.href = baseUrl + '/' + link.href;
+        }
+      });
+      
+      // Update img srcs  
+      container.querySelectorAll('img[src]').forEach(img => {
+        if (!img.src.startsWith('http') && !img.src.startsWith('/')) {
+          img.src = baseUrl + '/' + img.src;
+        }
+      });
+      
+      document.getElementById('appContent').appendChild(container);
+      document.getElementById('appLoading').style.display = 'none';
+      
+      // Execute inline scripts
+      container.querySelectorAll('script:not([src])').forEach(script => {
+        const newScript = document.createElement('script');
+        newScript.textContent = script.textContent;
+        document.body.appendChild(newScript);
+      });
+    })
+    .catch(error => {
+      console.error('Error loading app:', error);
+      document.getElementById('appLoading').innerHTML = '<div style="color:#ff6b6b;text-align:center;"><div>⚠️ Failed to load app</div><div style="font-size:.9rem;margin-top:.5rem;">Error: ' + error.message + '</div></div>';
+    });
+}
+
+function closeAppModal() {
+  document.getElementById('appModal').classList.remove('open');
+  document.getElementById('appContent').innerHTML = '';
+  document.getElementById('appLoading').style.display = 'flex';
+  document.getElementById('appLoading').innerHTML = '<div class="app-loading-spinner"></div>';
 }
 
 function closeApp() {
-  showSection('dashboard');
+  closeAppModal();
 }
 
 // Load all admin data
@@ -749,6 +973,7 @@ function loadAllData() {
   loadReviews();
   loadDocuments();
   loadOpportunities();
+  loadTeam();
 }
 
 // Reviews Management
@@ -1002,6 +1227,128 @@ function saveSettings() {
   };
   setState('mh_settings', settings);
   alert('✓ Settings saved successfully!');
+}
+
+// Team Management
+let tmPhotoData = null;
+
+function previewTeamPhoto(input) {
+  if (!input.files.length) return;
+  const file = input.files[0];
+  if (file.size > 5 * 1024 * 1024) {
+    alert('File too large (max 5MB)');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    tmPhotoData = e.target.result;
+    document.getElementById('tm-photo-prev').style.display = 'block';
+    document.getElementById('tm-photo-img').src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function addTeamMember(e) {
+  e.preventDefault();
+  const name = document.getElementById('tm-name').value.trim();
+  const role = document.getElementById('tm-role').value.trim();
+  
+  if (!name || !role) {
+    alert('Please enter name and role');
+    return;
+  }
+  
+  const team = getState('mh_team', []);
+  team.push({
+    id: 't' + Date.now(),
+    name,
+    role,
+    location: document.getElementById('tm-loc').value.trim() || '',
+    department: document.getElementById('tm-dept').value.trim() || '',
+    bio: document.getElementById('tm-bio').value.trim() || '',
+    photo: tmPhotoData || null,
+    status: 'pending'
+  });
+  setState('mh_team', team);
+  
+  // Reset form
+  document.getElementById('tm-name').value = '';
+  document.getElementById('tm-role').value = '';
+  document.getElementById('tm-loc').value = '';
+  document.getElementById('tm-dept').value = '';
+  document.getElementById('tm-bio').value = '';
+  document.getElementById('tm-photo').value = '';
+  document.getElementById('tm-photo-prev').style.display = 'none';
+  tmPhotoData = null;
+  
+  alert('✓ Team member added (pending approval)');
+  loadTeam();
+}
+
+function loadTeam() {
+  const team = getState('mh_team', []);
+  const pending = team.filter(t => t.status === 'pending');
+  const live = team.filter(t => t.status === 'approved');
+  
+  let html = '<div class="adm-section-title" style="font-size:1.1rem;margin-top:0;">Pending Members</div>';
+  if (!pending.length) {
+    html += '<div style="color:var(--muted);font-style:italic;padding:1rem;">No pending members.</div>';
+  } else {
+    html += pending.map(t => `
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;border-radius:4px;display:flex;gap:1rem;">
+        ${t.photo ? `<img src="${t.photo}" style="width:80px;height:100px;object-fit:cover;border:1.5px solid var(--gold);border-radius:4px;"/>` : ''}
+        <div style="flex:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+            <strong style="color:var(--white);">${t.name}</strong>
+            <span style="font-size:.7rem;background:rgba(255,165,0,.15);color:orange;padding:.25rem .6rem;border-radius:3px;text-transform:uppercase;">Pending</span>
+          </div>
+          <div style="color:var(--text);font-size:.9rem;margin-bottom:.25rem;">${t.role}</div>
+          ${t.location ? `<div style="color:var(--muted);font-size:.8rem;">📍 ${t.location}</div>` : ''}
+          ${t.bio ? `<div style="font-size:.85rem;color:var(--muted);margin-top:.5rem;font-style:italic;">${t.bio.slice(0,100)}</div>` : ''}
+          <div style="display:flex;gap:.5rem;margin-top:1rem;">
+            <button class="btn btn-primary" style="flex:1;padding:.5rem;font-size:.8rem;" onclick="approveTeamMember('${t.id}')">✓ Approve</button>
+            <button class="btn btn-secondary" style="flex:1;padding:.5rem;font-size:.8rem;" onclick="deleteTeamMember('${t.id}')">Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  html += '<div class="adm-section-title" style="font-size:1.1rem;margin-top:2rem;">Live Members</div>';
+  if (!live.length) {
+    html += '<div style="color:var(--muted);font-style:italic;padding:1rem;">No live members.</div>';
+  } else {
+    html += live.map(t => `
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;border-radius:4px;display:flex;gap:1rem;">
+        ${t.photo ? `<img src="${t.photo}" style="width:80px;height:100px;object-fit:cover;border:1.5px solid var(--gold);border-radius:4px;"/>` : '<div style="width:80px;height:100px;background:rgba(212,160,50,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;"><span style="font-size:2rem;color:var(--gold);">👤</span></div>'}
+        <div style="flex:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+            <strong style="color:var(--white);">${t.name}</strong>
+            <span style="font-size:.7rem;background:rgba(80,200,80,.15);color:#50c850;padding:.25rem .6rem;border-radius:3px;text-transform:uppercase;">Live</span>
+          </div>
+          <div style="color:var(--text);font-size:.9rem;margin-bottom:.25rem;">${t.role}</div>
+          ${t.location ? `<div style="color:var(--muted);font-size:.8rem;">📍 ${t.location}</div>` : ''}
+          <button class="btn btn-secondary" style="padding:.5rem 1rem;font-size:.8rem;margin-top:1rem;" onclick="deleteTeamMember('${t.id}')">Remove from site</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  document.getElementById('team-content').innerHTML = html;
+}
+
+function approveTeamMember(id) {
+  let team = getState('mh_team', []);
+  team = team.map(t => t.id === id ? { ...t, status: 'approved' } : t);
+  setState('mh_team', team);
+  loadTeam();
+}
+
+function deleteTeamMember(id) {
+  if (!confirm('Remove this team member?')) return;
+  let team = getState('mh_team', []).filter(t => t.id !== id);
+  setState('mh_team', team);
+  loadTeam();
 }
 
 // Add CSS for active section display

@@ -1119,6 +1119,7 @@ async function sendAIMessage(overrideText) {
   </a>
   <ul class="navlinks" id="navlinks">
     <li><a href="#services">Services</a></li>
+    <li><a href="#applications">Applications</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#global">Global</a></li>
     <li><a href="#team">Team</a></li>
@@ -1128,7 +1129,7 @@ async function sendAIMessage(overrideText) {
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#contact" class="nav-btn">Get a Quote</a>
-  <button class="nav-admin" onclick="adminTrigger()" title="Admin Panel">⚙</button>
+  <button class="nav-admin" onclick="window.location.href='/admin'" title="Admin Panel">⚙</button>
   <button class="burger" onclick="toggleNav()"><span></span><span></span><span></span></button>
 </nav>
 
@@ -1322,6 +1323,52 @@ async function sendAIMessage(overrideText) {
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;text-transform:uppercase;color:var(--gold);">Need Something Custom?</div>
         <p style="font-size:.875rem;color:var(--text);font-weight:300;line-height:1.7;">Bespoke solutions for unique challenges. Let's talk about your specific requirements.</p>
         <a href="#contact" class="btn-gold" style="font-size:.8rem;" onclick="event.stopPropagation()">Talk to Us</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ APPLICATIONS ═══ -->
+<section id="applications" style="background:var(--navy2);">
+  <div class="si">
+    <div class="fi">
+      <div class="slbl">Productivity Tools</div>
+      <h2 class="stitle">Our <span class="gd">Applications</span></h2>
+      <p class="ssub">Powerful, ready-to-use tools designed to streamline your business processes and boost productivity.</p>
+    </div>
+    <div class="sgrid" style="grid-template-columns:repeat(2,1fr);">
+
+      <div class="sc fi" onclick="window.location.href='/apps/invoice-generator/'">
+        <span class="sc-click-hint">LAUNCH APP</span>
+        <div class="scn">01</div><div class="sci">📄</div>
+        <div class="scname">Invoice Generator</div>
+        <div class="scdesc">Create professional invoices in seconds. Customizable templates, automatic calculations, and instant PDF exports.</div>
+        <div class="sclink">Launch Application →</div>
+      </div>
+
+      <div class="sc fi d1" onclick="window.location.href='/apps/report-generator/'">
+        <span class="sc-click-hint">LAUNCH APP</span>
+        <div class="scn">02</div><div class="sci">📊</div>
+        <div class="scname">Report Generator</div>
+        <div class="scdesc">Convert Excel data into stunning visual reports. Charts, analytics, and PowerPoint exports — all automated.</div>
+        <div class="sclink">Launch Application →</div>
+      </div>
+
+      <div class="sc fi d2" onclick="window.location.href='/apps/resume-builder/'">
+        <span class="sc-click-hint">LAUNCH APP</span>
+        <div class="scn">03</div><div class="sci">📋</div>
+        <div class="scname">Resume Builder</div>
+        <div class="scdesc">Build a professional resume step-by-step. Multiple templates, instant preview, and one-click downloads.</div>
+        <div class="sclink">Launch Application →</div>
+      </div>
+
+      <div class="sc fi d3" onclick="window.location.href='/apps/tds-manager/'">
+        <span class="sc-click-hint">LAUNCH APP</span>
+        <div class="scn">04</div><div class="sci">💼</div>
+        <div class="scname">TDS Manager</div>
+        <div class="scdesc">Manage Tax Deducted at Source with ease. Track deductions, generate reports, and stay compliant.</div>
+        <div class="sclink">Launch Application →</div>
       </div>
 
     </div>
@@ -1663,7 +1710,7 @@ async function sendAIMessage(overrideText) {
     </div>
   </div>
   <div class="fbot">
-    <div class="fcopy">© 2025 Mcharv Techlabs Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="javascript:void(0);" onclick="adminTrigger()" style="cursor:pointer;opacity:.3;font-size:.7rem;color:var(--gold);text-decoration:none;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.3'" title="Admin Panel">⚙</a></div>
+    <div class="fcopy">© 2025 Mcharv Techlabs Private Limited. All rights reserved. &nbsp;·&nbsp; <a href="/admin" style="cursor:pointer;opacity:.3;font-size:.7rem;color:var(--gold);text-decoration:none;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.3'" title="Admin Panel">⚙</a></div>
     <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
       <!-- Social Media Icons -->
       <div class="social-links">

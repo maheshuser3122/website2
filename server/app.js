@@ -9,6 +9,8 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import rateLimit from 'express-rate-limit';
+import { httpProxy } from './proxyUtils.js';
 
 // Load environment variables
 dotenv.config();
@@ -18,11 +20,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = dirname(__dirname);
 
-console.log('DEBUG Paths:');
-console.log('  __filename:', __filename);
-console.log('  __dirname:', __dirname);
-console.log('  rootDir:', rootDir);
-
 // Create Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,20 +27,51 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // ========== MIDDLEWARE ==========
 
+// Security Headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  
+  // Don't set X-Frame-Options for app routes (allow iframe embedding)
+  if (!req.path.startsWith('/apps/')) {
+    res.setHeader('X-Frame-Options', 'DENY');
+  }
+  
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  next();
+});
+
 // Logging
 app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
 
-// CORS
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP'
+});
+app.use(limiter);
+
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 30,
+  skip: (req) => req.method === 'GET'
+});
+
+// CORS - Restricted for production
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',').map(o => o.trim());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: NODE_ENV === 'production' ? allowedOrigins : '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
 }));
 
-// Body parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Body parser with size limits
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Static files
 app.use(express.static(join(rootDir, 'public')));
@@ -83,6 +111,21 @@ app.get('/admin', (req, res) => {
 // Serve Invoice Generator (frontend only)
 app.use('/apps/invoice-generator', express.static(join(rootDir, 'apps/invoice-generator/frontend')));
 
+// Proxy Invoice Generator API requests
+const invoiceBackendUrl = process.env.INVOICE_BACKEND_URL || 'http://localhost:3001';
+app.post('/api/send-invoice', (req, res) => {
+  console.log('[Route] POST /api/send-invoice', { bodyKeys: Object.keys(req.body || {}) });
+  httpProxy(req, res, `${invoiceBackendUrl}/api/send-invoice`);
+});
+app.post('/api/test-email', (req, res) => {
+  console.log('[Route] POST /api/test-email');
+  httpProxy(req, res, `${invoiceBackendUrl}/api/test-email`);
+});
+app.get('/api/email-status', (req, res) => {
+  console.log('[Route] GET /api/email-status');
+  httpProxy(req, res, `${invoiceBackendUrl}/api/email-status`);
+});
+
 // Serve Report Generator (frontend only)
 app.use('/apps/report-generator', express.static(join(rootDir, 'apps/report-generator/frontend')));
 
@@ -93,12 +136,19 @@ app.use('/apps/resume-builder', express.static(join(rootDir, 'apps/resume-builde
 app.use('/apps/tds-manager', express.static(join(rootDir, 'apps/tds-manager/frontend')));
 
 // AI Chat API
-app.post('/api/chat', (req, res) => {
-  const { messages } = req.body;
-  
-  if (!messages || messages.length === 0) {
-    return res.status(400).json({ error: 'No messages provided' });
-  }
+app.post('/api/chat', apiLimiter, (req, res) => {
+  try {
+    const { messages } = req.body;
+    
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'Invalid messages format' });
+    }
+    
+    // Validate message format
+    const validMessages = messages.every(m => m && m.content && typeof m.content === 'string' && m.content.length < 5000);
+    if (!validMessages) {
+      return res.status(400).json({ error: 'Message validation failed' });
+    }
 
   // Get the last user message
   const lastMessage = messages[messages.length - 1];
@@ -153,40 +203,40 @@ app.post('/api/chat', (req, res) => {
     }
   ];
 
-  // Score each pattern based on keyword matches
-  let bestMatch = null;
-  let bestScore = 0;
+    // Score each pattern based on keyword matches
+    let bestMatch = null;
+    let bestScore = 0;
 
-  for (let i = 0; i < patterns.length; i++) {
-    const pattern = patterns[i];
-    let hasMatch = false;
-    let matched = [];
-    
-    for (const keyword of pattern.keywords) {
-      // Use word boundaries to avoid partial matches like "hi" in "hire"
-      const regex = new RegExp(`\\b${keyword}\\b`);
-      if (regex.test(userText)) {
-        hasMatch = true;
-        matched.push(keyword);
-        break; // Stop after first match for this pattern
+    for (let i = 0; i < patterns.length; i++) {
+      const pattern = patterns[i];
+      let hasMatch = false;
+      
+      for (const keyword of pattern.keywords) {
+        const regex = new RegExp(`\\b${keyword}\\b`);
+        if (regex.test(userText)) {
+          hasMatch = true;
+          break;
+        }
+      }
+      
+      const score = hasMatch ? pattern.priority : 0;
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = pattern;
       }
     }
-    
-    const score = hasMatch ? pattern.priority : 0;
-    
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = pattern;
-    }
+
+    // Use matched response or default
+    const reply = bestMatch?.response || "I'm here to help with questions about Mc'Harv Techlabs! You can ask me about:\n\n• **Our Services** - Tech support, training, recruitment, consulting\n• **Locations** - We operate in UK, India, US & Ireland\n• **Hiring** - Career opportunities with our team\n• **Contact** - How to reach us\n• **Billing** - Pricing & packages\n\nWhat would you like to know?";
+
+    // Send response in Claude-like format
+    res.json({
+      content: [{ type: 'text', text: reply }]
+    });
+  } catch (err) {
+    console.error('Chat API Error:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  // Use matched response or default
-  const reply = bestMatch?.response || "I'm here to help with questions about Mc'Harv Techlabs! You can ask me about:\n\n• **Our Services** - Tech support, training, recruitment, consulting\n• **Locations** - We operate in UK, India, US & Ireland\n• **Hiring** - Career opportunities with our team\n• **Contact** - How to reach us\n• **Billing** - Pricing & packages\n\nWhat would you like to know?";
-
-  // Send response in Claude-like format
-  res.json({
-    content: [{ type: 'text', text: reply }]
-  });
 });
 
 // ========== ERROR HANDLING ==========

@@ -557,7 +557,8 @@ async function sendInvoiceEmail() {
                 closeEmailModal();
             }, 2000);
         } else {
-            showEmailStatus(`❌ Failed to send invoice: ${data.message}`, 'error');
+            const errorMessage = data.message || 'Unknown error occurred';
+            showEmailStatus(`❌ Failed to send invoice: ${errorMessage}`, 'error');
         }
     } catch (error) {
         showEmailStatus(`❌ Failed to process email request: ${error.message}`, 'error');

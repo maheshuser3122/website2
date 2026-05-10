@@ -71,10 +71,13 @@ function getLogoBase64() {
 app.post('/api/send-invoice', async (req, res) => {
   let browser;
   try {
+    console.log('[API] POST /api/send-invoice received', { bodyKeys: Object.keys(req.body || {}), bodySize: JSON.stringify(req.body || {}).length });
+    
     const { invoiceHTML, emailTo, emailCC, emailBCC, recipientName, invoiceNumber, companyName, grandTotal, amountInWords, servicePeriod } = req.body;
 
     // Validate input
     if (!invoiceHTML || !emailTo || emailTo.length === 0) {
+      console.log('[API] Validation failed', { hasHTML: !!invoiceHTML, hasEmails: !!emailTo, emailCount: emailTo?.length });
       return res.status(400).json({
         success: false,
         message: 'Missing required fields: invoiceHTML and emailTo'
@@ -336,14 +339,21 @@ app.post('/api/send-invoice', async (req, res) => {
       ]
     };
 
+    // Check if logo file exists before sending
+    const logoPath = path.join(__dirname, 'company-logo.jpg');
+    if (!fs.existsSync(logoPath)) {
+      console.warn('Logo file not found at:', logoPath);
+      // Remove logo attachment if it doesn't exist
+      mailOptions.attachments = mailOptions.attachments.filter(att => att.cid !== 'logoImage');
+    }
+
     // Send email
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         console.error('Email Error:', err);
         return res.status(500).json({
           success: false,
-          message: 'Failed to send invoice',
-          error: err.message
+          message: `Failed to send invoice: ${err.message}`
         });
       }
 
@@ -363,8 +373,7 @@ app.post('/api/send-invoice', async (req, res) => {
     }
     res.status(500).json({
       success: false,
-      message: 'Failed to send invoice',
-      error: error.message
+      message: `Failed to send invoice: ${error.message || 'Unknown error'}`
     });
   }
 });
@@ -400,8 +409,7 @@ app.post('/api/test-email', async (req, res) => {
     console.error('Test Email Error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to send test email',
-      error: error.message
+      message: `Failed to send test email: ${error.message || 'Unknown error'}`
     });
   }
 });
@@ -430,9 +438,13 @@ app.get('/api/email-status', (req, res) => {
   });
 });
 
-// Serve index.html
+// Health check endpoint
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.json({
+    status: 'Invoice Generator API is running',
+    timestamp: new Date().toISOString(),
+    port: process.env.PORT || 3000
+  });
 });
 
 // Start Server
