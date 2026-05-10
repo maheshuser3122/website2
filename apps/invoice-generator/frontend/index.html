@@ -316,5 +316,27 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Hide header when loaded in iframe (admin dashboard)
+        if (window.self !== window.top) {
+            const header = document.querySelector('.app-header');
+            if (header) {
+                header.style.display = 'none';
+            }
+            const appContainer = document.querySelector('.app-container');
+            if (appContainer) {
+                appContainer.style.paddingTop = '0';
+            }
+            // Update back link to send message to parent
+            const backLink = document.querySelector('.back-link');
+            if (backLink) {
+                backLink.href = '#';
+                backLink.onclick = (e) => {
+                    e.preventDefault();
+                    window.parent.postMessage({ action: 'closeApp' }, '*');
+                };
+            }
+        }
+    </script>
 </body>
 </html>

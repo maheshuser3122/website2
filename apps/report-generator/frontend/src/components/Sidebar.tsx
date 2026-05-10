@@ -1,5 +1,4 @@
 import React from 'react'
-import { FiX, FiUpload, FiSettings, FiHelpCircle, FiBook } from 'react-icons/fi'
 
 interface SidebarProps {
   isOpen: boolean
@@ -8,10 +7,10 @@ interface SidebarProps {
 
 function Sidebar({ isOpen, onToggle }: SidebarProps) {
   const menuItems = [
-    { icon: FiUpload, label: 'Upload Data', section: 'upload' },
-    { icon: FiBook, label: 'Report Templates', section: 'templates' },
-    { icon: FiSettings, label: 'Settings', section: 'settings' },
-    { icon: FiHelpCircle, label: 'Help & Documentation', section: 'help' },
+    { icon: '📤', label: 'Upload Data', section: 'upload' },
+    { icon: '📋', label: 'Report Templates', section: 'templates' },
+    { icon: '⚙️', label: 'Settings', section: 'settings' },
+    { icon: '❓', label: 'Help & Documentation', section: 'help' },
   ]
 
   return (
@@ -33,7 +32,7 @@ function Sidebar({ isOpen, onToggle }: SidebarProps) {
         <div className="flex items-center justify-between p-6 border-b border-gray-800">
           <h2 className="text-xl font-bold">Menu</h2>
           <button onClick={onToggle} className="lg:hidden p-2 hover:bg-gray-800 rounded">
-            <FiX className="w-6 h-6" />
+            ✕
           </button>
         </div>
 
@@ -44,7 +43,7 @@ function Sidebar({ isOpen, onToggle }: SidebarProps) {
               href={`#${item.section}`}
               className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors group"
             >
-              <item.icon className="w-5 h-5 group-hover:text-blue-400" />
+              <span className="w-5 h-5 flex items-center justify-center group-hover:text-blue-400">{item.icon}</span>
               <span>{item.label}</span>
             </a>
           ))}
