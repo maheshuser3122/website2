@@ -12,7 +12,7 @@
 
     "start:resume": "cd apps/resume-builder/backend && npm start",
     "start:tds": "cd apps/tds-manager/backend && npm start",
-    "start:all-backends": "concurrently \"npm run start:invoice\" \"npm run start:report\" \"npm run start:resume\" \"npm run start:tds\" \"npm start\"",
+    "start:all-backends": "concurrently \"npm run start:invoice\" \"npm run start:resume\" \"npm run start:tds\" \"npm start\"",
     "dev:invoice": "cd apps/invoice-generator/backend && npm run dev",
 
     "dev:resume": "cd apps/resume-builder/backend && npm run dev",
@@ -31,6 +31,7 @@
   "author": "MCHARV TECHLABS",
   "license": "MIT",
   "dependencies": {
+    "concurrently": "^8.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -38,7 +39,6 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "concurrently": "^8.2.0",
     "nodemon": "^3.0.1"
   },
   "engines": {
