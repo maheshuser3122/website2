@@ -700,6 +700,46 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
       </div>
     </section>
 
+    <!-- Reviews Section -->
+    <section id="reviews-section" class="section">
+      <div class="page-title">Review Management</div>
+      
+      <!-- Create Invite Card -->
+      <div style="margin-bottom:2rem;padding:2rem;background:linear-gradient(135deg,rgba(212,160,50,.15),rgba(212,160,50,.05));border:1.5px solid var(--border2);border-radius:8px;">
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;letter-spacing:1px;">✉️ Create Review Invite</h3>
+        <div style="display:flex;gap:1rem;align-items:flex-end;">
+          <div style="flex:1;">
+            <label style="font-size:.8rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:1px;display:block;margin-bottom:.5rem;">Reviewer Email *</label>
+            <input type="email" id="invite-email" placeholder="reviewer@example.com" style="width:100%;background:rgba(6,13,26,.8);border:1.5px solid var(--border);color:var(--white);padding:.8rem 1rem;font-family:'Barlow',sans-serif;font-size:.9rem;outline:none;border-radius:4px;"/>
+          </div>
+          <button type="button" id="generate-link-btn" class="btn btn-primary" style="padding:.8rem 1.5rem;">Generate Link</button>
+          <button type="button" onclick="console.log('[Test] Debug button clicked'); alert('✓ JavaScript is working!');" class="btn btn-primary" style="padding:.8rem 1.5rem;background:rgba(100,100,255,.3);border:1px solid rgba(100,100,255,.5);">🔧 Test</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:1rem;margin-bottom:2rem;border-bottom:1.5px solid var(--border2);padding-bottom:1rem;">
+        <button type="button" onclick="switchReviewTab('pending')" class="review-tab active" style="background:none;border:none;color:var(--gold);cursor:pointer;font-weight:700;text-transform:uppercase;font-size:.9rem;letter-spacing:1px;padding:.5rem 1rem;border-bottom:3px solid var(--gold);margin-bottom:-1rem;">📋 Pending Reviews</button>
+        <button type="button" onclick="switchReviewTab('approved')" class="review-tab" style="background:none;border:none;color:var(--muted);cursor:pointer;font-weight:700;text-transform:uppercase;font-size:.9rem;letter-spacing:1px;padding:.5rem 1rem;transition:color .2s;">✓ Approved Reviews</button>
+        <button type="button" onclick="switchReviewTab('invites')" class="review-tab" style="background:none;border:none;color:var(--muted);cursor:pointer;font-weight:700;text-transform:uppercase;font-size:.9rem;letter-spacing:1px;padding:.5rem 1rem;transition:color .2s;">🔗 Active Invites</button>
+      </div>
+
+      <!-- Pending Reviews -->
+      <div id="pending-reviews-tab">
+        <div id="pending-reviews-list" style="display:grid;gap:1.5rem;"></div>
+      </div>
+
+      <!-- Approved Reviews -->
+      <div id="approved-reviews-tab" style="display:none;">
+        <div id="approved-reviews-list" style="display:grid;gap:1.5rem;"></div>
+      </div>
+
+      <!-- Active Invites -->
+      <div id="invites-tab" style="display:none;">
+        <div id="invites-list" style="display:grid;gap:1.5rem;"></div>
+      </div>
+    </section>
+
     <!-- Team Section -->
     <section id="team-section" class="section">
       <div class="page-title">Team Management</div>
@@ -1336,6 +1376,234 @@ function deleteTeamMember(id) {
   setState('mh_team', team);
   loadTeam();
 }
+
+// ========== REVIEW MANAGEMENT ==========
+
+async function createReviewInvite() {
+  const email = document.getElementById('invite-email').value.trim();
+  console.log('[Review] Creating invite for email:', email);
+  
+  if (!email) {
+    alert('Please enter an email');
+    return;
+  }
+  
+  try {
+    console.log('[Review] Sending POST request to /api/admin/reviews/create-invite');
+    const response = await fetch('/api/admin/reviews/create-invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    
+    console.log('[Review] Response status:', response.status);
+    
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`HTTP ${response.status}: ${error}`);
+    }
+    
+    const data = await response.json();
+    console.log('[Review] Response data:', data);
+    
+    const link = data.shareLink;
+    const emailSent = data.emailSent;
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.style.cssText = `background:${emailSent ? 'rgba(81,207,102,.1)' : 'rgba(212,160,50,.1)'};border:1px solid ${emailSent ? '#51cf66' : '#D4A032'};color:${emailSent ? '#69db7c' : '#F0BE56'};padding:1rem;border-radius:4px;margin-top:1rem;`;
+    msgDiv.innerHTML = `
+      <div style="margin-bottom:.5rem;font-weight:700;">${emailSent ? '✓ Invite sent via email!' : '⚠️ Invite created (email not sent)'}</div>
+      ${emailSent ? `<p style="font-size:.85rem;margin-bottom:.75rem;">We've sent the review invitation to <strong>${email}</strong>. They'll receive a link to submit their feedback.</p>` : `<p style="font-size:.85rem;margin-bottom:.75rem;"><strong>Email could not be sent.</strong> Please share this link manually with the reviewer:</p>`}
+      <div style="background:rgba(0,0,0,.3);padding:.75rem;border-radius:3px;word-break:break-all;font-size:.85rem;font-family:monospace;">${link}</div>
+      <button type="button" onclick="navigator.clipboard.writeText('${link}'); this.textContent = '✓ Copied!'; setTimeout(() => this.parentElement.remove(), 2000);" style="margin-top:.75rem;background:${emailSent ? 'rgba(81,207,102,.2);border:1px solid #51cf66;color:#69db7c' : 'rgba(212,160,50,.2);border:1px solid #D4A032;color:#F0BE56'};padding:.5rem 1rem;border-radius:3px;cursor:pointer;font-weight:700;">📋 Copy Link</button>
+    `;
+    
+    document.getElementById('invite-email').parentElement.parentElement.insertAdjacentElement('afterend', msgDiv);
+    document.getElementById('invite-email').value = '';
+    loadReviews();
+  } catch (error) {
+    console.error('[Review] Error creating invite:', error);
+    alert('Error: ' + error.message);
+  }
+}
+
+function switchReviewTab(tab) {
+  ['pending', 'approved', 'invites'].forEach(t => {
+    document.getElementById(t + '-reviews-tab') ? document.getElementById(t + '-reviews-tab').style.display = 'none' : null;
+    document.getElementById(t + '-tab') ? document.getElementById(t + '-tab').style.display = 'none' : null;
+  });
+  
+  document.getElementById(tab + '-reviews-tab') ? document.getElementById(tab + '-reviews-tab').style.display = 'block' : null;
+  document.getElementById(tab + '-tab') ? document.getElementById(tab + '-tab').style.display = 'block' : null;
+  
+  document.querySelectorAll('.review-tab').forEach(t => {
+    t.style.color = 'var(--muted)';
+    t.style.borderBottom = 'none';
+    t.style.marginBottom = '0';
+  });
+  
+  event.target.style.color = 'var(--gold)';
+  event.target.style.borderBottom = '3px solid var(--gold)';
+  event.target.style.marginBottom = '-1rem';
+}
+
+async function loadReviews() {
+  try {
+    const response = await fetch('/api/admin/reviews');
+    if (!response.ok) throw new Error('Failed to fetch reviews');
+    
+    const data = await response.json();
+    const { reviews, invites } = data;
+    
+    // Pending Reviews
+    const pending = reviews.filter(r => r.status === 'pending');
+    const pendingHtml = pending.length ? pending.map(r => `
+      <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:1.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem;">
+          <div>
+            <div style="font-weight:700;color:var(--white);font-size:1rem;">${r.name}</div>
+            <div style="font-size:.85rem;color:var(--gold2);">${r.designation}</div>
+            <div style="font-size:.8rem;color:var(--muted);">📍 ${r.location}</div>
+          </div>
+          <div style="font-size:1.2rem;letter-spacing:2px;color:var(--gold2);">${'⭐'.repeat(r.rating)}</div>
+        </div>
+        <div style="background:rgba(6,13,26,.5);padding:1rem;border-radius:4px;margin-bottom:1rem;font-size:.9rem;line-height:1.6;color:var(--text);font-style:italic;">"${r.reviewText}"</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+          <button type="button" onclick="approveReviewAPI('${r.id}')" class="btn btn-primary" style="padding:.6rem;font-size:.8rem;">✓ Approve</button>
+          <button type="button" onclick="rejectReviewAPI('${r.id}')" class="btn" style="background:rgba(255,107,107,.2);border:1px solid #ff6b6b;color:#ff8787;padding:.6rem;border-radius:4px;font-size:.8rem;cursor:pointer;font-weight:700;text-transform:uppercase;">✕ Reject</button>
+        </div>
+      </div>
+    `).join('') : '<div style="color:var(--muted);text-align:center;padding:2rem;">No pending reviews</div>';
+    
+    document.getElementById('pending-reviews-list').innerHTML = pendingHtml;
+    
+    // Approved Reviews
+    const approved = reviews.filter(r => r.status === 'approved');
+    const approvedHtml = approved.length ? approved.map(r => `
+      <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:1.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem;">
+          <div>
+            <div style="font-weight:700;color:var(--white);font-size:1rem;">${r.name}</div>
+            <div style="font-size:.85rem;color:var(--gold2);">${r.designation}</div>
+            <div style="font-size:.8rem;color:var(--muted);">📍 ${r.location}</div>
+          </div>
+          <div style="font-size:1.2rem;letter-spacing:2px;color:var(--gold2);">${'⭐'.repeat(r.rating)}</div>
+        </div>
+        <div style="background:rgba(6,13,26,.5);padding:1rem;border-radius:4px;margin-bottom:1rem;font-size:.9rem;line-height:1.6;color:var(--text);font-style:italic;">"${r.reviewText}"</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+          <button type="button" onclick="deleteReviewAPI('${r.id}')" class="btn" style="background:rgba(255,107,107,.2);border:1px solid #ff6b6b;color:#ff8787;padding:.6rem;border-radius:4px;font-size:.8rem;cursor:pointer;font-weight:700;text-transform:uppercase;">🗑️ Delete</button>
+        </div>
+      </div>
+    `).join('') : '<div style="color:var(--muted);text-align:center;padding:2rem;">No approved reviews yet</div>';
+    
+    document.getElementById('approved-reviews-list').innerHTML = approvedHtml;
+    
+    // Active Invites
+    const active = invites.filter(i => !i.revoked && !i.usedAt);
+    const invitesHtml = active.length ? active.map(i => `
+      <div style="background:linear-gradient(135deg,var(--navy3),var(--navy4));border:1.5px solid var(--border2);border-radius:8px;padding:1.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem;">
+          <div>
+            <div style="font-weight:700;color:var(--white);font-size:1rem;">📧 ${i.email}</div>
+            <div style="font-size:.8rem;color:var(--muted);">Created: ${new Date(i.createdAt).toLocaleDateString()}</div>
+          </div>
+          <div style="background:rgba(81,207,102,.15);border:1px solid #51cf66;color:#69db7c;padding:.4rem .75rem;border-radius:3px;font-size:.75rem;font-weight:700;text-transform:uppercase;">Active</div>
+        </div>
+        <div style="background:rgba(6,13,26,.5);padding:.75rem;border-radius:4px;margin-bottom:1rem;word-break:break-all;font-size:.8rem;font-family:monospace;color:var(--muted);">${i.link}</div>
+        <button type="button" onclick="revokeInviteAPI('${i.id}')" class="btn" style="width:100%;background:rgba(255,107,107,.2);border:1px solid #ff6b6b;color:#ff8787;padding:.6rem;border-radius:4px;font-size:.8rem;cursor:pointer;font-weight:700;text-transform:uppercase;">🔓 Revoke Access</button>
+      </div>
+    `).join('') : '<div style="color:var(--muted);text-align:center;padding:2rem;">No active invites</div>';
+    
+    document.getElementById('invites-list').innerHTML = invitesHtml;
+  } catch (error) {
+    console.error('Error loading reviews:', error);
+  }
+}
+
+async function approveReviewAPI(reviewId) {
+  try {
+    const response = await fetch('/api/admin/reviews/approve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reviewId })
+    });
+    
+    if (!response.ok) throw new Error('Failed to approve review');
+    alert('✓ Review approved! It\'s now visible on the reviews page.');
+    loadReviews();
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+}
+
+async function rejectReviewAPI(reviewId) {
+  if (!confirm('Remove this review?')) return;
+  
+  try {
+    const response = await fetch('/api/admin/reviews/reject', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reviewId })
+    });
+    
+    if (!response.ok) throw new Error('Failed to reject review');
+    loadReviews();
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+}
+
+async function deleteReviewAPI(reviewId) {
+  if (!confirm('Permanently delete this review?')) return;
+  
+  try {
+    const response = await fetch('/api/admin/reviews/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reviewId })
+    });
+    
+    if (!response.ok) throw new Error('Failed to delete review');
+    loadReviews();
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+}
+
+async function revokeInviteAPI(inviteId) {
+  if (!confirm('Revoke this invite? The link will no longer work.')) return;
+  
+  try {
+    const response = await fetch('/api/admin/reviews/revoke-invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ inviteId })
+    });
+    
+    if (!response.ok) throw new Error('Failed to revoke invite');
+    loadReviews();
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+}
+
+// Attach event listener to Generate Link button
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('[Review] DOMContentLoaded - attaching event listeners');
+  const btn = document.getElementById('generate-link-btn');
+  if (btn) {
+    console.log('[Review] Generate Link button found, attaching click listener');
+    btn.addEventListener('click', function() {
+      console.log('[Review] Generate Link button clicked via event listener');
+      createReviewInvite();
+    });
+  } else {
+    console.error('[Review] Generate Link button NOT found!');
+  }
+  
+  // Load reviews on page load
+  loadReviews();
+});
 
 // Add CSS for active section display
 const style = document.createElement('style');

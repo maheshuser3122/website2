@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import rateLimit from 'express-rate-limit';
 import { httpProxy } from './proxyUtils.js';
+import * as reviewManager from './reviewManager.js';
 
 // Load environment variables
 dotenv.config();
@@ -234,6 +235,36 @@ app.post('/api/chat', apiLimiter, (req, res) => {
     console.error('Chat API Error:', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
+});
+
+// ========== REVIEW MANAGEMENT ROUTES ==========
+
+// Public reviews (visible on /reviews page)
+app.get('/api/reviews', reviewManager.getPublicReviews);
+
+// Submit review via invite link
+app.post('/api/reviews/submit', reviewManager.submitReview);
+
+// Validate invite token
+app.get('/api/reviews/validate/:token', reviewManager.validateInvite);
+
+// Admin routes
+app.get('/api/admin/reviews', reviewManager.getAdminReviews);
+app.post('/api/admin/reviews/create-invite', reviewManager.createInvite);
+app.post('/api/admin/reviews/approve', reviewManager.approveReview);
+app.post('/api/admin/reviews/reject', reviewManager.rejectReview);
+app.post('/api/admin/reviews/update', reviewManager.updateReview);
+app.post('/api/admin/reviews/delete', reviewManager.deleteReview);
+app.post('/api/admin/reviews/revoke-invite', reviewManager.revokeInvite);
+
+// Serve review submission page
+app.get('/review/:token', (req, res) => {
+  res.sendFile(join(rootDir, 'apps/dashboard/review-form.html'));
+});
+
+// Serve reviews page
+app.get('/reviews', (req, res) => {
+  res.sendFile(join(rootDir, 'apps/dashboard/reviews.html'));
 });
 
 // ========== ERROR HANDLING ==========

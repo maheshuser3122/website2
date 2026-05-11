@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Your Review — Mc'Harv Techlabs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #060D1A;
+      --navy2: #0C1E35;
+      --navy3: #142848;
+      --gold: #D4A032;
+      --gold2: #F0BE56;
+      --white: #F4F1EA;
+      --text: #C8D8E8;
+      --muted: #7A95B0;
+      --error: #ff6b6b;
+      --success: #51cf66;
+      --border: rgba(212,160,50,0.2);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: rgba(12, 30, 53, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .logo { text-align: center; margin-bottom: 30px; }
+    .logo-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+    .logo-text em { color: var(--gold); font-style: normal; }
+    
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    
+    .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 30px; }
+    
+    .form-group { margin-bottom: 20px; }
+    
+    label {
+      display: block;
+      font-weight: 500;
+      color: var(--gold2);
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(20, 40, 72, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(20, 40, 72, 0.8);
+      box-shadow: 0 0 0 3px rgba(212, 160, 50, 0.1);
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .rating {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .rating input[type="radio"] {
+      display: none;
+    }
+    
+    .rating label {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      background: rgba(20, 40, 72, 0.6);
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--muted);
+      margin: 0;
+    }
+    
+    .rating input[type="radio"]:checked + label {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+    }
+    
+    .rating label:hover {
+      border-color: var(--gold);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: var(--navy);
+      border: none;
+      border-radius: 4px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212, 160, 50, 0.3);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .alert {
+      padding: 14px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .alert-error {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid var(--error);
+      color: #ff8787;
+    }
+    
+    .alert-success {
+      background: rgba(81, 207, 102, 0.1);
+      border: 1px solid var(--success);
+      color: #69db7c;
+    }
+    
+    .alert-info {
+      background: rgba(212, 160, 50, 0.1);
+      border: 1px solid var(--gold);
+      color: var(--gold2);
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(212, 160, 50, 0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .field-hint { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <div class="logo-text">Mc'<em>Harv</em></div>
+    </div>
+    
+    <h1>Share Your Feedback</h1>
+    <p class="subtitle">We'd love to hear about your experience working with us</p>
+    
+    <div id="alert-container"></div>
+    
+    <form id="review-form">
+      <div class="form-group">
+        <label for="name">Your Name *</label>
+        <input type="text" id="name" name="name" required placeholder="Full name"/>
+        <p class="field-hint">How should we credit you?</p>
+      </div>
+      
+      <div class="form-group">
+        <label for="designation">Designation *</label>
+        <input type="text" id="designation" name="designation" required placeholder="e.g., Project Manager, CTO, Business Owner"/>
+        <p class="field-hint">Your role or title</p>
+      </div>
+      
+      <div class="form-group">
+        <label for="location">Location *</label>
+        <input type="text" id="location" name="location" required placeholder="e.g., London, UK or New York, USA"/>
+        <p class="field-hint">City and country</p>
+      </div>
+      
+      <div class="form-group">
+        <label>Rating *</label>
+        <div class="rating">
+          <input type="radio" id="rating1" name="rating" value="1" required/>
+          <label for="rating1">⭐</label>
+          
+          <input type="radio" id="rating2" name="rating" value="2"/>
+          <label for="rating2">⭐⭐</label>
+          
+          <input type="radio" id="rating3" name="rating" value="3"/>
+          <label for="rating3">⭐⭐⭐</label>
+          
+          <input type="radio" id="rating4" name="rating" value="4"/>
+          <label for="rating4">⭐⭐⭐⭐</label>
+          
+          <input type="radio" id="rating5" name="rating" value="5"/>
+          <label for="rating5">⭐⭐⭐⭐⭐</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="reviewText">Your Review *</label>
+        <textarea id="reviewText" name="reviewText" required placeholder="Share your experience, what went well, and how we helped you achieve your goals..."></textarea>
+        <p class="field-hint">Minimum 20 characters</p>
+      </div>
+      
+      <button type="submit" class="btn" id="submit-btn">Submit Review</button>
+    </form>
+  </div>
+
+  <script>
+    const token = window.location.pathname.split('/')[2];
+    
+    // Validate token on page load
+    async function validateToken() {
+      try {
+        const response = await fetch(`/api/reviews/validate/${token}`);
+        if (!response.ok) {
+          showAlert('Invalid or expired invite link. Please contact the admin for a new link.', 'error');
+          document.getElementById('review-form').style.display = 'none';
+        }
+      } catch (error) {
+        showAlert('Error validating your access. Please try again.', 'error');
+      }
+    }
+    
+    // Show alert message
+    function showAlert(message, type = 'info') {
+      const container = document.getElementById('alert-container');
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+      container.innerHTML = '';
+      container.appendChild(alertDiv);
+    }
+    
+    // Form submission
+    document.getElementById('review-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      const formData = {
+        token,
+        name: document.getElementById('name').value,
+        designation: document.getElementById('designation').value,
+        location: document.getElementById('location').value,
+        rating: document.getElementById('rating5').checked ? 5 :
+                 document.getElementById('rating4').checked ? 4 :
+                 document.getElementById('rating3').checked ? 3 :
+                 document.getElementById('rating2').checked ? 2 : 1,
+        reviewText: document.getElementById('reviewText').value
+      };
+      
+      if (formData.reviewText.length < 20) {
+        showAlert('Review must be at least 20 characters long', 'error');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="loading"></span> Submitting...';
+      
+      try {
+        const response = await fetch('/api/reviews/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        if (response.ok) {
+          showAlert('✓ Thank you! Your review has been submitted and will be reviewed by our team shortly.', 'success');
+          document.getElementById('review-form').reset();
+          setTimeout(() => {
+            window.location.href = '/reviews';
+          }, 3000);
+        } else {
+          const error = await response.json();
+          showAlert(error.error || 'Failed to submit review', 'error');
+        }
+      } catch (error) {
+        showAlert('Network error. Please try again.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Review';
+      }
+    });
+    
+    validateToken();
+  </script>
+</body>
+</html>

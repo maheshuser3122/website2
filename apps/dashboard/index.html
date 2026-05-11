@@ -2310,6 +2310,8 @@ function saveDirectorPhoto(key){
   // Update live site
   const live=document.getElementById('dir-'+key);
   if(live){live.innerHTML=`<img src="${dirPhotoData[key]}" class="tcav-img" style="object-position:${dirPhotoAlign[key]};"/>`;live.style.background='none';live.style.padding='0';}
+  // Rebuild carousel to reflect changes
+  buildDirectorsCarousel();
   alert('✓ Director photo saved and updated on the site!');
 }
 

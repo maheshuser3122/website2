@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Reviews — Mc'Harv Techlabs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #060D1A;
+      --navy2: #0C1E35;
+      --navy3: #142848;
+      --navy4: #1A3258;
+      --gold: #D4A032;
+      --gold2: #F0BE56;
+      --white: #F4F1EA;
+      --text: #C8D8E8;
+      --muted: #7A95B0;
+      --border: rgba(212,160,50,0.2);
+      --card: rgba(12, 30, 53, 0.9);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(212,160,50,0.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(212,160,50,0.04) 1px,transparent 1px);
+      background-size: 72px 72px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6%;
+      height: 70px;
+      background: rgba(6, 13, 26, 0.94);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    
+    .logo-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+    
+    .logo-text em {
+      color: var(--gold);
+      font-style: normal;
+    }
+    
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    
+    nav a:hover {
+      color: var(--gold);
+    }
+    
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 6% 60px;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    
+    h1 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 60px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* REVIEWS GRID */
+    #reviews {
+      padding: 60px 6%;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+    
+    .review-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .review-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+    }
+    
+    .review-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 12px 40px rgba(212, 160, 50, 0.1);
+      transform: translateY(-4px);
+    }
+    
+    .rating-stars {
+      color: var(--gold2);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+    
+    .review-text {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    
+    .review-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      color: var(--white);
+      font-size: 0.95rem;
+    }
+    
+    .reviewer-title {
+      font-size: 0.85rem;
+      color: var(--gold2);
+    }
+    
+    .reviewer-location {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    
+    .empty-state h2 {
+      font-size: 1.5rem;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    
+    /* FOOTER */
+    footer {
+      padding: 40px 6%;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(212, 160, 50, 0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      nav {
+        padding: 0 4%;
+      }
+      
+      #hero {
+        padding: 80px 4% 40px;
+      }
+      
+      #reviews {
+        padding: 40px 4%;
+      }
+      
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-text">Mc'<em>Harv</em></div>
+    </a>
+    <a href="/">← Back to Home</a>
+  </nav>
+  
+  <section id="hero">
+    <h1>What Our <em>Clients</em> Say</h1>
+    <p class="subtitle">Trusted by teams across the UK, US, India, and Ireland</p>
+  </section>
+  
+  <section id="reviews">
+    <div class="reviews-grid" id="reviews-container">
+      <div style="grid-column: 1/-1; text-align: center;">
+        <div class="loading"></div>
+      </div>
+    </div>
+  </section>
+  
+  <footer>
+    <p>© 2026 Mc'Harv Techlabs. All rights reserved. | <a href="/admin">Admin Portal</a></p>
+  </footer>
+
+  <script>
+    async function loadReviews() {
+      try {
+        const response = await fetch('/api/reviews');
+        if (!response.ok) throw new Error('Failed to fetch reviews');
+        
+        const reviews = await response.json();
+        const container = document.getElementById('reviews-container');
+        
+        if (reviews.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column: 1/-1;">
+              <div class="empty-state">
+                <h2>No Reviews Yet</h2>
+                <p>Be the first to share your experience with us!</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        container.innerHTML = reviews
+          .sort((a, b) => new Date(b.approvedAt) - new Date(a.approvedAt))
+          .map(review => `
+            <div class="review-card">
+              <div class="rating-stars">${'⭐'.repeat(review.rating)}</div>
+              <p class="review-text">"${review.reviewText}"</p>
+              <div class="review-meta">
+                <div class="reviewer-name">${review.name}</div>
+                <div class="reviewer-title">${review.designation}</div>
+                <div class="reviewer-location">📍 ${review.location}</div>
+              </div>
+            </div>
+          `).join('');
+      } catch (error) {
+        console.error('Error loading reviews:', error);
+        document.getElementById('reviews-container').innerHTML = `
+          <div style="grid-column: 1/-1;">
+            <div class="empty-state">
+              <h2>Unable to Load Reviews</h2>
+              <p>Please try again later.</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    loadReviews();
+  </script>
+</body>
+</html>

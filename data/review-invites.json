@@ -1,0 +1,49 @@
+{
+  "invites": [
+    {
+      "id": "1778506232183",
+      "email": "test@example.com",
+      "token": "39324dcab200df52cf5f472b8f51aa62f7217581b91364d027c8bfec8e4bea9b",
+      "createdAt": "2026-05-11T13:30:32.192Z",
+      "usedAt": null,
+      "revoked": false,
+      "link": "/review/39324dcab200df52cf5f472b8f51aa62f7217581b91364d027c8bfec8e4bea9b"
+    },
+    {
+      "id": "1778506512064",
+      "email": "test.reviewer@example.com",
+      "token": "088253e703f4f97429817d5730774be79728dc4659ebf28ab0e54e6066c857e4",
+      "createdAt": "2026-05-11T13:35:12.064Z",
+      "usedAt": null,
+      "revoked": false,
+      "link": "/review/088253e703f4f97429817d5730774be79728dc4659ebf28ab0e54e6066c857e4"
+    },
+    {
+      "id": "1778506745974",
+      "email": "testuser@gmail.com",
+      "token": "0873b8bafaffc060f24e72c45cea0aaae48a394cdd2b75ed40215f6ad94dd833",
+      "createdAt": "2026-05-11T13:39:05.974Z",
+      "usedAt": null,
+      "revoked": false,
+      "link": "/review/0873b8bafaffc060f24e72c45cea0aaae48a394cdd2b75ed40215f6ad94dd833"
+    },
+    {
+      "id": "1778506858860",
+      "email": "pwtest@example.com",
+      "token": "b137a25e94991c481a6b46d1f7a9865700cea6eff8f729c4b3a68f86ffee2f17",
+      "createdAt": "2026-05-11T13:40:58.860Z",
+      "usedAt": null,
+      "revoked": false,
+      "link": "/review/b137a25e94991c481a6b46d1f7a9865700cea6eff8f729c4b3a68f86ffee2f17"
+    },
+    {
+      "id": "1778506905838",
+      "email": "finaltest@example.com",
+      "token": "8ef4082463d105561c07004b739f2b631473410e10807410d398bd354c274be1",
+      "createdAt": "2026-05-11T13:41:45.838Z",
+      "usedAt": null,
+      "revoked": false,
+      "link": "/review/8ef4082463d105561c07004b739f2b631473410e10807410d398bd354c274be1"
+    }
+  ]
+}
