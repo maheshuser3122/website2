@@ -3,10 +3,12 @@ services:
     name: mcharv-website2
     runtime: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && cd apps/invoice-generator/backend && npm install && cd ../../../
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 3000
+      - key: PUPPETEER_SKIP_DOWNLOAD
+        value: "true"
