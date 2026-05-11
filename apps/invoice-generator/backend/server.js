@@ -135,10 +135,18 @@ app.post('/api/send-invoice', async (req, res) => {
     `;
 
     // Generate PDF using Puppeteer
-    browser = await puppeteer.launch({
+    // Use system Chrome on production, download on local dev
+    const launchOptions = {
       headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+    };
+    
+    // On Render (production), use system-installed chromium
+    if (process.env.NODE_ENV === 'production') {
+      launchOptions.executablePath = '/usr/bin/chromium-browser' || '/usr/bin/chromium';
+    }
+    
+    browser = await puppeteer.launch(launchOptions);
     
     const page = await browser.newPage();
     await page.setContent(fullHTML, { 
