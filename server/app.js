@@ -126,9 +126,6 @@ app.get('/api/email-status', (req, res) => {
   httpProxy(req, res, `${invoiceBackendUrl}/api/email-status`);
 });
 
-// Serve Report Generator (frontend only)
-app.use('/apps/report-generator', express.static(join(rootDir, 'apps/report-generator/frontend')));
-
 // Serve Resume Builder (frontend only)
 app.use('/apps/resume-builder', express.static(join(rootDir, 'apps/resume-builder/frontend')));
 
@@ -276,7 +273,6 @@ app.listen(PORT, () => {
   • Dashboard: http://localhost:${PORT}/
   • Admin Panel: http://localhost:${PORT}/admin
   • Invoice Generator: http://localhost:${PORT}/apps/invoice-generator
-  • Report Generator: http://localhost:${PORT}/apps/report-generator
   • Resume Builder: http://localhost:${PORT}/apps/resume-builder
   • TDS Manager: http://localhost:${PORT}/apps/tds-manager
 

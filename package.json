@@ -7,18 +7,17 @@
   "scripts": {
     "start": "concurrently \"node server/app.js\" \"cd apps/invoice-generator/backend && npm start\"",
     "dev": "concurrently \"node --watch server/app.js\" \"cd apps/invoice-generator/backend && npm run dev\"",
-    "install:all": "npm install && cd apps/invoice-generator/backend && npm install && cd ../../report-generator/backend && npm install && cd ../../resume-builder/backend && npm install && cd ../../tds-manager/backend && npm install && cd ../../../..",
+    "install:all": "npm install && cd apps/invoice-generator/backend && npm install && cd ../../..",
     "start:invoice": "cd apps/invoice-generator/backend && npm start",
-    "start:report": "cd apps/report-generator/backend && npm start",
+
     "start:resume": "cd apps/resume-builder/backend && npm start",
     "start:tds": "cd apps/tds-manager/backend && npm start",
     "start:all-backends": "concurrently \"npm run start:invoice\" \"npm run start:report\" \"npm run start:resume\" \"npm run start:tds\" \"npm start\"",
     "dev:invoice": "cd apps/invoice-generator/backend && npm run dev",
-    "dev:report": "cd apps/report-generator/backend && npm run dev",
+
     "dev:resume": "cd apps/resume-builder/backend && npm run dev",
     "dev:tds": "cd apps/tds-manager/backend && npm run dev",
-    "build:report": "cd apps/report-generator/frontend && npm run build",
-    "lint": "cd apps/report-generator/frontend && npm run lint 2>/dev/null || true",
+    "lint": "echo 'Linting skipped'  ",
     "test": "echo 'No tests configured yet'"
   },
   "keywords": [
