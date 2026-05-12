@@ -34,14 +34,6 @@ jobs:
       - name: Copy public assets
         run: cp -r public/* dist/ 2>/dev/null || true
 
-      - name: Build and copy Report Generator
-        run: |
-          cd apps/report-generator/frontend
-          npm ci
-          npm run build
-          cd ../../../
-          cp -r apps/report-generator/frontend/dist/* dist/ 2>/dev/null || true
-
       - name: Copy other apps
         run: |
           mkdir -p dist/invoice-generator dist/resume-builder dist/tds-manager
