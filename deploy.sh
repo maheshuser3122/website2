@@ -15,17 +15,6 @@ cp apps/dashboard/api-client.js dist/
 echo "Copying public assets..."
 cp -r public/* dist/ 2>/dev/null || true
 
-# Build Report Generator
-echo "Building Report Generator..."
-cd apps/report-generator/frontend
-npm install
-npm run build
-cd ../../../
-
-# Copy Report Generator dist
-echo "Copying Report Generator build..."
-cp -r apps/report-generator/frontend/dist/* dist/ 2>/dev/null || true
-
 # Copy other frontend apps
 echo "Copying other frontend apps..."
 mkdir -p dist/invoice-generator
