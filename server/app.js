@@ -239,6 +239,11 @@ app.post('/api/chat', apiLimiter, (req, res) => {
 
 // ========== REVIEW MANAGEMENT ROUTES ==========
 
+// Directors data endpoint
+app.get('/data/directors.json', (req, res) => {
+  res.sendFile(join(rootDir, 'data/directors.json'));
+});
+
 // Public reviews (visible on /reviews page)
 app.get('/api/reviews', reviewManager.getPublicReviews);
 

@@ -1,0 +1,22 @@
+{
+  "directors": [
+    {
+      "id": "hb",
+      "name": "Harshitha Bidarahalli Padmanabha",
+      "role": "Director",
+      "location": "🇬🇧 United Kingdom",
+      "bio": "Over six years of hands-on experience in the telecom industry, backed by specialised training in teaching from Oxford University. Deep expertise in client engagement across UK, US and India — combining technical depth with exceptional communication to build lasting relationships and drive meaningful business outcomes.",
+      "photo": "/assets/directors/harshitha.jpg",
+      "photoAlign": "top center"
+    },
+    {
+      "id": "sb",
+      "name": "Shrinivas Bidarahalli Padmanabha",
+      "role": "Director",
+      "location": "🇬🇧 United Kingdom",
+      "bio": "Over five years in software development focused on scalable, user-centric solutions. Expert in full-stack development, agile methodologies and modern frameworks — from MVP to enterprise. Known for precision, collaborative leadership, and technical excellence that drives the company's growth and innovation.",
+      "photo": null,
+      "photoAlign": "top center"
+    }
+  ]
+}

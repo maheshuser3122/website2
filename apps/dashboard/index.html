@@ -2319,7 +2319,7 @@ function saveDirectorPhoto(key){
 /* ══════════════════════════════════════════
    INITIALISE ON LOAD
 ══════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
   // Initialize directors first (before carousel build)
   const initDirs=()=>{
     if(!localStorage.getItem('mh_directors')){
@@ -2330,7 +2330,29 @@ document.addEventListener('DOMContentLoaded',()=>{
       localStorage.setItem('mh_directors',JSON.stringify(directors));
     }
   };
+  
+  // Load director photos and alignments
+  const loadDirectorPhotos=async()=>{
+    try{
+      const res=await fetch('/data/directors.json');
+      const data=await res.json();
+      const photos={};
+      const aligns={};
+      data.directors.forEach(d=>{
+        if(d.photo){photos[d.id]=d.photo;}
+        if(d.photoAlign){aligns[d.id]=d.photoAlign;}
+      });
+      if(Object.keys(photos).length>0){
+        setState('mh_dir_photos',photos);
+        setState('mh_dir_aligns',aligns);
+      }
+    }catch(e){
+      console.log('Directors photos not loaded (OK if using localStorage)');
+    }
+  };
+  
   initDirs();
+  await loadDirectorPhotos();
   buildDirectorsCarousel();
   buildTestimonialsCarousel();
   renderPublicOpportunities();
