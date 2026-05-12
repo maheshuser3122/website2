@@ -15,6 +15,8 @@
     "dev:invoice": "cd apps/invoice-generator/backend && npm run dev",
     "dev:resume": "cd apps/resume-builder/backend && npm run dev",
     "dev:tds": "cd apps/tds-manager/backend && npm run dev",
+    "build": "echo 'Build skipped - server uses Express'",
+    "build:report": "echo 'Report builder not available'",
     "lint": "echo 'Linting skipped'  ",
     "test": "echo 'No tests configured yet'"
   },
